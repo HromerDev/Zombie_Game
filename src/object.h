@@ -37,10 +37,7 @@ enum Sounds
 };
 enum Textures  
 {
-    TEXTURE_PIPE1,
-    TEXTURE_PIPE2,
-    TEXTURE_PARTICLE,
-    TEXTURE_PLAYER,
+    TEXTURE_DEBUG,
 };
 
 enum ObjectLayers 

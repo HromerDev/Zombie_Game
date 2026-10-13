@@ -11,6 +11,7 @@ extern int SCREENWIDTH;
 extern int SCREENHEIGHT;
 extern int FPS;
 
+extern Camera2D camera;
 extern bool gameOver;
 #define WINDOWNAME "Zombie"
 

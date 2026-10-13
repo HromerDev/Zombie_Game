@@ -19,14 +19,14 @@ void initTextures()
 
     allSprites = malloc(sizeof(dynarray));
     dynarray_init(allSprites, 1);
+    textureArray[TEXTURE_DEBUG] = LoadTexture("assets/debug.png");  
+    //textureArray[TEXTURE_PLAYER] = LoadTexture("assets/player.png");
+    //textureArray[TEXTURE_PIPE1] = LoadTexture("assets/pipe1.png");
+    //textureArray[TEXTURE_PIPE2] = LoadTexture("assets/pipe2.png");
+    //textureArray[TEXTURE_PARTICLE] = LoadTexture("assets/particle4.png");
 
-    textureArray[TEXTURE_PLAYER] = LoadTexture("assets/player.png");
-    textureArray[TEXTURE_PIPE1] = LoadTexture("assets/pipe1.png");
-    textureArray[TEXTURE_PIPE2] = LoadTexture("assets/pipe2.png");
-    textureArray[TEXTURE_PARTICLE] = LoadTexture("assets/particle4.png");
-
-    sounds[SOUND_DEATH] = LoadSound("assets/death.wav");
-    sounds[SOUND_SCORE] = LoadSound("assets/score.wav");
+    //sounds[SOUND_DEATH] = LoadSound("assets/death.wav");
+    //sounds[SOUND_SCORE] = LoadSound("assets/score.wav");
 }
 
 Object* createObject(Rectangle collider, Sprite *sprite, double angle)
@@ -201,7 +201,7 @@ void drawSprites()
         */
     }  
     
-   /* 
+       /* 
     for(int i = 0; i < allObjects->size; i++) 
     {
         Object *temp = allObjects->items[i];
