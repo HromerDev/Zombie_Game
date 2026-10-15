@@ -9,6 +9,7 @@ int SCREENWIDTHPREFULLSCREEN;
 int SCREENHEIGHTPREFULLSCREEN;
 int FPS = 0;
 
+int cameraSpeed = 20;
 bool gameOver = true;
 Vector2 cameraTarget;
 Camera2D camera;
@@ -49,14 +50,19 @@ void restart()
 }
 void update() //input handling, logic
 {   
+    if(IsKeyDown(KEY_LEFT_SHIFT))   
+        cameraSpeed = 60; 
+    else 
+        cameraSpeed = 20;
+
    if(IsKeyDown(KEY_W))
-       camera.target.y -= 20 * UNIT_PIXEL_SIZE * GetFrameTime();
+       camera.target.y -= cameraSpeed * UNIT_PIXEL_SIZE * GetFrameTime();
    if(IsKeyDown(KEY_S))
-       camera.target.y += 20 * UNIT_PIXEL_SIZE * GetFrameTime();
+       camera.target.y += cameraSpeed * UNIT_PIXEL_SIZE * GetFrameTime();
    if(IsKeyDown(KEY_A))
-       camera.target.x -= 20 * UNIT_PIXEL_SIZE * GetFrameTime();
+       camera.target.x -= cameraSpeed * UNIT_PIXEL_SIZE * GetFrameTime();
    if(IsKeyDown(KEY_D))
-       camera.target.x += 20 * UNIT_PIXEL_SIZE * GetFrameTime();
+       camera.target.x += cameraSpeed * UNIT_PIXEL_SIZE * GetFrameTime();
 
     if(IsKeyPressed(KEY_F))
     {
