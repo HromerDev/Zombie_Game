@@ -2,20 +2,25 @@
 #include "../src/unit_system.h"
 #include "raylib.h"
 
-int SCREENWIDTH = 500;
-int SCREENHEIGHT = 500;
+int SCREENWIDTH = 1280;
+int SCREENHEIGHT = 720;
+
+int SCREENWIDTHPREFULLSCREEN;
+int SCREENHEIGHTPREFULLSCREEN;
 int FPS = 0;
+
 bool gameOver = true;
 Vector2 cameraTarget;
 Camera2D camera;
-
+bool isFullscreen = false;
+Vector2 mousePos;
 void start() //initializations
 {
     InitWindow(SCREENWIDTH, SCREENHEIGHT, WINDOWNAME);
     InitAudioDevice();
     SetTargetFPS(FPS);
 //    SetWindowState(FLAG_VSYNC_HINT);
-    ToggleFullscreen();
+    //ToggleFullscreen();
     recalculateUnitSize(GetScreenWidth(), GetScreenHeight());
 }
 
@@ -34,6 +39,7 @@ void gameStart()
             createObject((Rectangle){i,j,4,4}, createSprite((Rectangle){i,j,4,4}, TEXTURE_DEBUG, 0,0),0);
         }
     }
+
 }
 
 void restart() 
@@ -51,15 +57,43 @@ void update() //input handling, logic
        camera.target.x -= 20 * UNIT_PIXEL_SIZE * GetFrameTime();
    if(IsKeyDown(KEY_D))
        camera.target.x += 20 * UNIT_PIXEL_SIZE * GetFrameTime();
+
+    if(IsKeyPressed(KEY_F))
+    {
+        if(isFullscreen){
+
+            ToggleFullscreen();
+            SCREENWIDTH = SCREENWIDTHPREFULLSCREEN;
+            SCREENHEIGHT = SCREENHEIGHTPREFULLSCREEN;
+            recalculateUnitSize(SCREENWIDTH, SCREENHEIGHT);
+            isFullscreen = false;
+            
+        }
+        else {
+                 
+            ToggleFullscreen();
+
+            SCREENWIDTHPREFULLSCREEN = SCREENWIDTH;
+            SCREENHEIGHTPREFULLSCREEN = SCREENHEIGHT;
+            recalculateUnitSize(GetScreenWidth(), GetScreenHeight());
+
+            isFullscreen = true;    
+        } 
+        
+    }
+    mousePos = GetMousePosition();
 }
 
 void draw() //drawing a frame (primarely for text)
 { 
      
     
-    DrawText("Hello World!", camera.target.x + 10, camera.target.y + 10, 30, YELLOW);
+    DrawText(TextFormat("X: %.0f, Y:%.0f", mousePos.x, mousePos.y), camera.target.x + 10, camera.target.y + 10, 30, YELLOW);
+
+    DrawText(TextFormat("X: %.0f, Y:%.0f", mousePos.x + camera.target.x, mousePos.y + camera.target.y), camera.target.x + 10, camera.target.y + 40, 30, YELLOW);
 
     DrawText(TextFormat("%.0fFPS", 1 / GetFrameTime()), camera.target.x , camera.target.y + SCREENHEIGHT - 20, 20, GREEN);
+
 }
 
 void end() 

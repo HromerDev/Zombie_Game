@@ -61,7 +61,7 @@ void moveSprite(Sprite *sprite, float x, float y);
 void moveSpriteRelative(Sprite *sprite, float x, float y);
 void drawSprites();
 //void allObjectsLayerSort(); 
-void recalculateAllUnits();
+void recalculateAllUnits(double newUnitSize, double oldUnitSize);
 void freeObjects();
 void freeSprites();
 int returnObjectAmount();

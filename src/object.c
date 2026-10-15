@@ -5,6 +5,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include <time.h>
+#include "../scripts/game_manager.h"
 
 Color backgroundColor = {0, 0, 0, 255};
 Texture2D textureArray[10];
@@ -214,20 +215,20 @@ void drawSprites()
     }
     */   
 }
-void recalculateAllUnits()
+void recalculateAllUnits(double newUnitSize, double oldUnitSize)
 {
+
+    double difference = newUnitSize / oldUnitSize;
     if (allObjects != NULL)
     {
         for (int i = 0; i < allObjects->size; i++)
         {
             Object *object = allObjects->items[i];
-
-            object->collider = (Rectangle){
-                object->originalCollider.x * UNIT_PIXEL_SIZE,
-                object->originalCollider.y * UNIT_PIXEL_SIZE,
-                object->originalCollider.width * UNIT_PIXEL_SIZE,
-                object->originalCollider.height * UNIT_PIXEL_SIZE
-            };
+            
+            object->collider.x *= difference;
+            object->collider.y *= difference;
+            object->collider.width *= difference;
+            object->collider.height *= difference; 
 
             updateObjectAnchors(object);
         }
@@ -238,18 +239,23 @@ void recalculateAllUnits()
         for (int i = 0; i < allSprites->size; i++)
         {
             Sprite *sprite = allSprites->items[i];
-
-            sprite->textureArea = (Rectangle){
-                sprite->originalArea.x * UNIT_PIXEL_SIZE,
-                sprite->originalArea.y * UNIT_PIXEL_SIZE,
-                sprite->originalArea.width * UNIT_PIXEL_SIZE,
-                sprite->originalArea.height * UNIT_PIXEL_SIZE
-            };
+            sprite->textureArea.x *= difference;
+            sprite->textureArea.y *= difference;
+            sprite->textureArea.width *= difference;
+            sprite->textureArea.height *= difference;
 
             updateSpriteAnchors(sprite);
         }
     }
 
+    if (UNIT_PIXEL_SIZE > 0)
+    {
+        double scale = newUnitSize / UNIT_PIXEL_SIZE;
+
+        camera.target.x *= scale;
+        camera.target.y *= scale;
+    }
+/*
     if (allObjects != NULL)
     {
         for (int i = 0; i < allObjects->size; i++)
@@ -268,6 +274,7 @@ void recalculateAllUnits()
             }
         }
     }
+    */
 }
 
 void freeObjects() 

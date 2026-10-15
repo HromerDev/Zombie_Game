@@ -13,6 +13,7 @@ void recalculateUnitSize(int newScreenWidth, int newScreenHeight)
     double newUnitSize = shortestScreenSide / scaler;
     SCREENWIDTH = newScreenWidth;
     SCREENHEIGHT = newScreenHeight;
+    recalculateAllUnits(newUnitSize, UNIT_PIXEL_SIZE);
     UNIT_PIXEL_SIZE = newUnitSize;
     
     //for(size_t i = 0; i < scaler; i++)
@@ -21,6 +22,6 @@ void recalculateUnitSize(int newScreenWidth, int newScreenHeight)
     //}
 
     SetWindowSize(SCREENWIDTH, SCREENHEIGHT);
-    recalculateAllUnits();
+    
 }
 
