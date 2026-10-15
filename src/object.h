@@ -37,14 +37,13 @@ enum Sounds
 };
 enum Textures  
 {
+    TEXTURE_AAAA,
     TEXTURE_DEBUG,
 };
 
 enum ObjectLayers 
-{ 
-    LAYERS_PARTICLE,
-    LAYERS_PLAYER,
-    LAYERS_PIPES,
+{
+    LAYER_TILES
 };
 
 void initTextures();

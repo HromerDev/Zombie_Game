@@ -1,5 +1,6 @@
 #include "game_manager.h"
 #include "../src/unit_system.h"
+#include "../src/tilemap.h"
 #include "raylib.h"
 
 int SCREENWIDTH = 1280;
@@ -8,6 +9,7 @@ int SCREENHEIGHT = 720;
 int SCREENWIDTHPREFULLSCREEN;
 int SCREENHEIGHTPREFULLSCREEN;
 int FPS = 0;
+Font font;
 
 int cameraSpeed = 20;
 bool gameOver = true;
@@ -19,8 +21,9 @@ void start() //initializations
 {
     InitWindow(SCREENWIDTH, SCREENHEIGHT, WINDOWNAME);
     InitAudioDevice();
+    font = LoadFontEx("assets/fonts/tiny5.ttf", 30, 0, 250);
     SetTargetFPS(FPS);
-//    SetWindowState(FLAG_VSYNC_HINT);
+    //SetWindowState(FLAG_VSYNC_HINT);
     //ToggleFullscreen();
     recalculateUnitSize(GetScreenWidth(), GetScreenHeight());
 }
@@ -31,16 +34,19 @@ void gameStart()
     initTimer();
     initParticleSystem();
     
+    initTiles();
+    loadMap("debug_map.mapdata");
+
     camera.zoom = 1;
     camera.target = (Vector2){0,0};
-
+/*
     for(int i = 0; i * UNIT_PIXEL_SIZE< SCREENWIDTH; i+=4) {
         for(int j = 0; j * UNIT_PIXEL_SIZE < SCREENHEIGHT; j+=4) 
         {
             createObject((Rectangle){i,j,4,4}, createSprite((Rectangle){i,j,4,4}, TEXTURE_DEBUG, 0,0),0);
         }
     }
-
+    */
 }
 
 void restart() 
@@ -71,6 +77,7 @@ void update() //input handling, logic
             ToggleFullscreen();
             SCREENWIDTH = SCREENWIDTHPREFULLSCREEN;
             SCREENHEIGHT = SCREENHEIGHTPREFULLSCREEN;
+
             recalculateUnitSize(SCREENWIDTH, SCREENHEIGHT);
             isFullscreen = false;
             
@@ -81,30 +88,33 @@ void update() //input handling, logic
 
             SCREENWIDTHPREFULLSCREEN = SCREENWIDTH;
             SCREENHEIGHTPREFULLSCREEN = SCREENHEIGHT;
+
             recalculateUnitSize(GetScreenWidth(), GetScreenHeight());
 
             isFullscreen = true;    
         } 
         
     }
-    mousePos = GetMousePosition();
+   mousePos = GetMousePosition();
 }
 
 void draw() //drawing a frame (primarely for text)
 { 
-     
-    
-    DrawText(TextFormat("X: %.0f, Y:%.0f", mousePos.x, mousePos.y), camera.target.x + 10, camera.target.y + 10, 30, YELLOW);
+    drawMap();
 
-    DrawText(TextFormat("X: %.0f, Y:%.0f", mousePos.x + camera.target.x, mousePos.y + camera.target.y), camera.target.x + 10, camera.target.y + 40, 30, YELLOW);
 
-    DrawText(TextFormat("%.0fFPS", 1 / GetFrameTime()), camera.target.x , camera.target.y + SCREENHEIGHT - 20, 20, GREEN);
+    DrawTextEx(font, TextFormat("X: %.0f, Y:%.0f", mousePos.x, mousePos.y), (Vector2){(int)(round(camera.target.x + 10)),(int)(round(camera.target.y + 10))},font.baseSize, 0, YELLOW);
+
+    DrawText(TextFormat("X: %.0f, Y:%.0f", mousePos.x + camera.target.x, mousePos.y + camera.target.y),(int)(round(camera.target.x + 10)), (int)(round(camera.target.y + 40)), 30, YELLOW);
+
+    DrawText(TextFormat("%.0fFPS", 1 / GetFrameTime()), (int)(round(camera.target.x)), (int)(round(camera.target.y + SCREENHEIGHT - 20)), 20, GREEN);
 
 }
 
 void end() 
 { 
-    
+    if(CURRENTLY_LOADED_MAP.mapData != NULL) 
+        freeMapData();
 }
 
 void freeCoreComponents() 
@@ -113,4 +123,5 @@ void freeCoreComponents()
     freeObjects();
     freeTimers();
     freeParticles();
+    UnloadFont(font);
 }

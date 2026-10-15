@@ -5,7 +5,6 @@
 #include <time.h>
 #include "unit_system.h"
 
-
 int main()
 {
     SetRandomSeed(time(NULL));
@@ -16,12 +15,13 @@ int main()
     {        
         update();
         iterateTimers();
-        
+
         BeginDrawing();
         BeginMode2D(camera);
-            drawSprites();   
+            drawSprites();  
             draw();
         EndMode2D();
+
         EndDrawing();
     }       
 
