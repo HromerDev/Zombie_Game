@@ -3,8 +3,8 @@
 #include "timer.h"
 #include "../scripts/game_manager.h"
 #include <time.h>
-#include "unit_system.h"
-
+#include "camera_handler.h"
+#include "tilemap.h"
 int main()
 {
     SetRandomSeed(time(NULL));
@@ -18,10 +18,12 @@ int main()
 
         BeginDrawing();
         BeginMode2D(camera);
+            ClearBackground(BLACK);
+            drawMap();
             drawSprites();  
             draw();
-        EndMode2D();
 
+        EndMode2D();
         EndDrawing();
     }       
 

@@ -1,6 +1,6 @@
 #include "dynamic_array.h"
 #include "raylib.h"
-#include "unit_system.h" 
+#include "camera_handler.h" 
 #include "object.h"
 #include "stdio.h"
 #include "stdlib.h"
@@ -187,7 +187,6 @@ void moveObjectRelative(Object *object, float x, float y)
 
 void drawSprites()
 {
-    ClearBackground(backgroundColor);
     
     for(int i = 0; i < allSprites->size; i++) 
     {

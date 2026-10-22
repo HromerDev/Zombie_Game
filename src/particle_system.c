@@ -1,7 +1,6 @@
 #include "particle_system.h"
 #include "dynamic_array.h"
-#include "unit_system.h"
-#include "unit_system.h"
+#include "camera_handler.h"
 #include "stdlib.h"
 
 dynarray *allParticleHandlers;
