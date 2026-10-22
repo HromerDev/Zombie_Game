@@ -61,7 +61,7 @@ void draw() //drawing a frame (primarely for text)
 {
     DrawTextEx(font, TextFormat("X: %.0f, Y:%.0f", mousePositionLocal.x, mousePositionLocal.y), (Vector2){(int)(round(camera.target.x + 10)),(int)(round(camera.target.y + 10))},font.baseSize, 0, YELLOW);
 
-    DrawText(TextFormat("X: %.0f, Y:%.0f", mousePositonGlobal.x, mousePositonGlobal.y),(int)(round(camera.target.x + 10)), (int)(round(camera.target.y + 40)), 30, YELLOW);
+    DrawText(TextFormat("X: %.0f, Y:%.0f", mousePositionGlobal.x, mousePositionGlobal.y),(int)(round(camera.target.x + 10)), (int)(round(camera.target.y + 40)), 30, YELLOW);
 
     DrawText(TextFormat("%.0fFPS", 1 / GetFrameTime()), (int)(round(CAMERA_ANCHOR_BOTTOM_LEFT.x)), (int)(round(CAMERA_ANCHOR_BOTTOM_LEFT.y - 20)), 20, GREEN);
 }

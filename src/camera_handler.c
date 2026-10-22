@@ -7,7 +7,7 @@
 Camera2D camera;
 
 Vector2 mousePositionLocal;
-Vector2 mousePositonGlobal;
+Vector2 mousePositionGlobal;
 
 double UNIT_PIXEL_SIZE = 0;
 int scaler = 60;
@@ -93,5 +93,5 @@ void moveCameraRelative(float x, float y) {
 void calculateMousePosition() {
 
     mousePositionLocal = GetMousePosition();
-    mousePositonGlobal = Vector2Add(mousePositionLocal, CAMERA_ANCHOR);
+    mousePositionGlobal = Vector2Add(mousePositionLocal, CAMERA_ANCHOR);
 }
