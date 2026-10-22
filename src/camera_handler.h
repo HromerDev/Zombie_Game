@@ -12,4 +12,6 @@ void cameraInit();
 void changeResolution(int newScreenWidth, int newScreenHeight);
 void fullScreenToggle();
 
+void moveCamera(int x, int y);
+void moveCameraRelative(float x, float y);
 #endif

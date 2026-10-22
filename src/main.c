@@ -12,7 +12,9 @@ int main()
     gameStart();
     
     while (!WindowShouldClose()) 
-    {        
+    {   
+        delta = GetFrameTime();
+
         update();
         iterateTimers();
 

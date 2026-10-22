@@ -5,7 +5,7 @@
 
 int SCREENWIDTH = 1280;
 int SCREENHEIGHT = 720;
-
+double delta = 0;
 int FPS = 0;
 Font font;
 
@@ -49,18 +49,16 @@ void update() //input handling, logic
         cameraSpeed = 20;
 
     if(IsKeyDown(KEY_W))
-        camera.target.y -= cameraSpeed * UNIT_PIXEL_SIZE * GetFrameTime();
+        moveCameraRelative(0, -cameraSpeed * UNIT_PIXEL_SIZE * delta); 
     if(IsKeyDown(KEY_S))
-        camera.target.y += cameraSpeed * UNIT_PIXEL_SIZE * GetFrameTime();
+        moveCameraRelative(0, cameraSpeed * UNIT_PIXEL_SIZE * delta); 
     if(IsKeyDown(KEY_A))
-        camera.target.x -= cameraSpeed * UNIT_PIXEL_SIZE * GetFrameTime();
+        moveCameraRelative(-cameraSpeed * UNIT_PIXEL_SIZE * delta, 0); 
     if(IsKeyDown(KEY_D))
-        camera.target.x += cameraSpeed * UNIT_PIXEL_SIZE * GetFrameTime();
+        moveCameraRelative(cameraSpeed * UNIT_PIXEL_SIZE * delta, 0); 
 
     if(IsKeyPressed(KEY_F))
-    {
-    fullScreenToggle(); 
-    }
+        fullScreenToggle(); 
 
    mousePos = GetMousePosition();
 }

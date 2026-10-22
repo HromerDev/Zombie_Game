@@ -2,6 +2,7 @@
 #include "object.h"
 #include "../scripts/game_manager.h"
 #include "raymath.h"
+#include <wchar.h>
 
 double UNIT_PIXEL_SIZE = 0;
 int scaler = 60;
@@ -14,10 +15,18 @@ Vector2 CAMERA_ANCHOR_TOP_RIGHT;
 Vector2 CAMERA_ANCHOR_BOTTOM_LEFT;
 Vector2 CAMERA_ANCHOR_BOTTOM_RIGHT;
 
+void recalculateCameraAnchors() {
+
+    CAMERA_ANCHOR = camera.offset;
+    CAMERA_ANCHOR_TOP_RIGHT = (Vector2){camera.offset.x + SCREENWIDTH, camera.offset.y};
+    CAMERA_ANCHOR_BOTTOM_LEFT = (Vector2){camera.offset.x, camera.offset.y + SCREENHEIGHT};
+    CAMERA_ANCHOR_BOTTOM_RIGHT = (Vector2){camera.offset.x + SCREENWIDTH, camera.offset.y + SCREENHEIGHT};
+}
+
 void cameraInit() {
 
     changeResolution(SCREENWIDTH, SCREENHEIGHT);
-    camera.offset = Vector2Zero();
+    camera.target = Vector2Zero();
     camera.zoom = 1;
 }
 
@@ -30,11 +39,7 @@ void changeResolution(int newScreenWidth, int newScreenHeight)
     SCREENHEIGHT = newScreenHeight;
     recalculateAllUnits(newUnitSize, UNIT_PIXEL_SIZE);
     UNIT_PIXEL_SIZE = newUnitSize;
-    
-    CAMERA_ANCHOR = camera.offset;
-    CAMERA_ANCHOR_TOP_RIGHT = (Vector2){camera.offset.x + SCREENWIDTH, camera.offset.y};
-    CAMERA_ANCHOR_BOTTOM_LEFT = (Vector2){camera.offset.x, camera.offset.y + SCREENHEIGHT};
-    CAMERA_ANCHOR_BOTTOM_RIGHT = (Vector2){camera.offset.x + SCREENWIDTH, camera.offset.y + SCREENHEIGHT};
+    recalculateCameraAnchors();
 
     SetWindowSize(SCREENWIDTH, SCREENHEIGHT);
 }
@@ -62,4 +67,20 @@ void fullScreenToggle() {
 
         isToggledFullscreen = false;
     } 
+}
+
+void moveCamera(int x, int y) {
+
+    camera.target.x = x;
+    camera.target.y = y;
+
+    recalculateCameraAnchors();
+}
+
+void moveCameraRelative(float x, float y) {
+
+    camera.target.x += x;
+    camera.target.y += y;
+
+    recalculateCameraAnchors();
 }
