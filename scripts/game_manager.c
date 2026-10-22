@@ -3,18 +3,13 @@
 #include "../src/camera_handler.h"
 #include "raylib.h"
 
-int SCREENWIDTH = 1280;
-int SCREENHEIGHT = 720;
+int SCREENWIDTH = 500;
+int SCREENHEIGHT = 500;
 double delta = 0;
 int FPS = 0;
 Font font;
-
 int cameraSpeed = 20;
-bool gameOver = true;
-Vector2 cameraTarget;
-Camera2D camera;
-bool isFullscreen = false;
-Vector2 mousePos;
+
 void start() //initializations
 {
     InitWindow(SCREENWIDTH, SCREENHEIGHT, WINDOWNAME);
@@ -59,18 +54,16 @@ void update() //input handling, logic
 
     if(IsKeyPressed(KEY_F))
         fullScreenToggle(); 
-
-   mousePos = GetMousePosition();
+    
 }
 
 void draw() //drawing a frame (primarely for text)
 {
+    DrawTextEx(font, TextFormat("X: %.0f, Y:%.0f", mousePositionLocal.x, mousePositionLocal.y), (Vector2){(int)(round(camera.target.x + 10)),(int)(round(camera.target.y + 10))},font.baseSize, 0, YELLOW);
 
-    DrawTextEx(font, TextFormat("X: %.0f, Y:%.0f", mousePos.x, mousePos.y), (Vector2){(int)(round(camera.target.x + 10)),(int)(round(camera.target.y + 10))},font.baseSize, 0, YELLOW);
+    DrawText(TextFormat("X: %.0f, Y:%.0f", mousePositonGlobal.x, mousePositonGlobal.y),(int)(round(camera.target.x + 10)), (int)(round(camera.target.y + 40)), 30, YELLOW);
 
-    DrawText(TextFormat("X: %.0f, Y:%.0f", mousePos.x + camera.target.x, mousePos.y + camera.target.y),(int)(round(camera.target.x + 10)), (int)(round(camera.target.y + 40)), 30, YELLOW);
-
-    DrawText(TextFormat("%.0fFPS", 1 / GetFrameTime()), (int)(round(camera.target.x)), (int)(round(camera.target.y + SCREENHEIGHT - 20)), 20, GREEN);
+    DrawText(TextFormat("%.0fFPS", 1 / GetFrameTime()), (int)(round(CAMERA_ANCHOR_BOTTOM_LEFT.x)), (int)(round(CAMERA_ANCHOR_BOTTOM_LEFT.y - 20)), 20, GREEN);
 }
 
 void end() 

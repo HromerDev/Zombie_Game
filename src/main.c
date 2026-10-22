@@ -14,7 +14,7 @@ int main()
     while (!WindowShouldClose()) 
     {   
         delta = GetFrameTime();
-
+        calculateMousePosition();
         update();
         iterateTimers();
 

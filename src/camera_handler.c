@@ -1,8 +1,13 @@
 #include "camera_handler.h" 
 #include "object.h"
 #include "../scripts/game_manager.h"
+#include "raylib.h"
 #include "raymath.h"
-#include <wchar.h>
+
+Camera2D camera;
+
+Vector2 mousePositionLocal;
+Vector2 mousePositonGlobal;
 
 double UNIT_PIXEL_SIZE = 0;
 int scaler = 60;
@@ -17,17 +22,17 @@ Vector2 CAMERA_ANCHOR_BOTTOM_RIGHT;
 
 void recalculateCameraAnchors() {
 
-    CAMERA_ANCHOR = camera.offset;
-    CAMERA_ANCHOR_TOP_RIGHT = (Vector2){camera.offset.x + SCREENWIDTH, camera.offset.y};
-    CAMERA_ANCHOR_BOTTOM_LEFT = (Vector2){camera.offset.x, camera.offset.y + SCREENHEIGHT};
-    CAMERA_ANCHOR_BOTTOM_RIGHT = (Vector2){camera.offset.x + SCREENWIDTH, camera.offset.y + SCREENHEIGHT};
+    CAMERA_ANCHOR = camera.target;
+    CAMERA_ANCHOR_TOP_RIGHT = (Vector2){camera.target.x + SCREENWIDTH, camera.target.y};
+    CAMERA_ANCHOR_BOTTOM_LEFT = (Vector2){camera.target.x, camera.target.y + SCREENHEIGHT};
+    CAMERA_ANCHOR_BOTTOM_RIGHT = (Vector2){camera.target.x + SCREENWIDTH, camera.target.y + SCREENHEIGHT};
 }
 
 void cameraInit() {
-
     changeResolution(SCREENWIDTH, SCREENHEIGHT);
     camera.target = Vector2Zero();
     camera.zoom = 1;
+
 }
 
 void changeResolution(int newScreenWidth, int newScreenHeight)
@@ -83,4 +88,10 @@ void moveCameraRelative(float x, float y) {
     camera.target.y += y;
 
     recalculateCameraAnchors();
+}
+
+void calculateMousePosition() {
+
+    mousePositionLocal = GetMousePosition();
+    mousePositonGlobal = Vector2Add(mousePositionLocal, CAMERA_ANCHOR);
 }

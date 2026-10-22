@@ -39,11 +39,13 @@ enum Textures
 {
     TEXTURE_AAAA,
     TEXTURE_DEBUG,
+    TEXTURE_CURSOR,
 };
 
 enum ObjectLayers 
 {
-    LAYER_TILES
+    LAYER_TILES,
+    LAYER_CURSOR,
 };
 
 void initTextures();

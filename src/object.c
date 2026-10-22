@@ -21,6 +21,8 @@ void initTextures()
     allSprites = malloc(sizeof(dynarray));
     dynarray_init(allSprites, 1);
     textureArray[TEXTURE_DEBUG] = LoadTexture("assets/debug.png");  
+
+    textureArray[TEXTURE_CURSOR] = LoadTexture("assets/cursor.png");
     //textureArray[TEXTURE_PLAYER] = LoadTexture("assets/player.png");
     //textureArray[TEXTURE_PIPE1] = LoadTexture("assets/pipe1.png");
     //textureArray[TEXTURE_PIPE2] = LoadTexture("assets/pipe2.png");
