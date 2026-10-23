@@ -7,7 +7,7 @@ extern Camera2D camera;
 
 extern Vector2 mousePosition;
 
-extern double UNIT_PIXEL_SIZE;
+extern int UNIT_PIXEL_SIZE;
 
 extern Vector2 CAMERA_ANCHOR;
 extern Vector2 CAMERA_ANCHOR_TOP_RIGHT;

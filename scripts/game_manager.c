@@ -4,10 +4,10 @@
 #include "raylib.h"
 #include "../src/ui_manager.h"  
 #include "../src/object.h"
-int SCREENWIDTH = 500;
+int SCREENWIDTH = 1000;
 int SCREENHEIGHT = 500;
 double delta = 0;
-int FPS = 0;
+int FPS = 60;
 Font font;
 int cameraSpeed = 20;
 UIContainer* debug;
@@ -71,6 +71,8 @@ void draw() //drawing a frame (primarely for text)
     DrawTextEx(font, TextFormat("X: %.0f, Y:%.0f", mousePositionLocal.x, mousePositionLocal.y), (Vector2){(int)(round(camera.target.x + 10)),(int)(round(camera.target.y + 10))},font.baseSize, 0, YELLOW);
 
     DrawText(TextFormat("X: %.0f, Y:%.0f", mousePositionGlobal.x, mousePositionGlobal.y),(int)(round(camera.target.x + 10)), (int)(round(camera.target.y + 40)), 30, YELLOW);
+
+    DrawText(TextFormat("unit pixel size:%d pixels",UNIT_PIXEL_SIZE),(int)(round(camera.target.x + 10)), (int)(round(camera.target.y + 70)), 30, YELLOW);
 
     DrawText(TextFormat("%.0fFPS", 1 / GetFrameTime()), (int)(round(CAMERA_ANCHOR_BOTTOM_LEFT.x)), (int)(round(CAMERA_ANCHOR_BOTTOM_LEFT.y - 20)), 20, GREEN);
 }

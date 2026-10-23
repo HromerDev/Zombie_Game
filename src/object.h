@@ -8,6 +8,7 @@ typedef struct
 {    
     Rectangle originalArea;
     Vector2 centerAnchor;
+    Color color;
     Rectangle textureArea;
     unsigned short opacity;
     unsigned int texture;

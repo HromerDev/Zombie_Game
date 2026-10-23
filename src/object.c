@@ -56,7 +56,7 @@ Sprite* createSprite(Rectangle textureArea, unsigned int texture, unsigned int l
 {
     Sprite* sprite = malloc(sizeof(Sprite));    
     sprite->originalArea = textureArea;
-
+    sprite->color = WHITE;
     sprite->textureArea = (Rectangle){
         textureArea.x * UNIT_PIXEL_SIZE,
         textureArea.y * UNIT_PIXEL_SIZE,
@@ -194,7 +194,7 @@ void drawSprites()
     {
         Sprite *temp = allSprites->items[i];
         
-        DrawTexturePro(textureArray[temp->texture], (Rectangle){0,0, textureArray[temp->texture].width, textureArray[temp->texture].height}, (Rectangle) {temp->centerAnchor.x , temp->centerAnchor.y, temp->textureArea.width, temp->textureArea.height}, (Vector2){temp->textureArea.width / 2,temp->textureArea.height / 2}, temp->angle, (Color) {255,255,255,temp->opacity});
+        DrawTexturePro(textureArray[temp->texture], (Rectangle){0,0, textureArray[temp->texture].width, textureArray[temp->texture].height}, (Rectangle) {temp->centerAnchor.x , temp->centerAnchor.y, temp->textureArea.width, temp->textureArea.height}, (Vector2){temp->textureArea.width / 2,temp->textureArea.height / 2}, temp->angle, (Color) {temp->color.r,temp->color.g,temp->color.b,temp->opacity});
         /*
         DrawCircle(temp->topLeftAnchor.x, temp->topLeftAnchor.y, 4, GREEN);
         DrawCircle(temp->topRightAnchor.x, temp->topRightAnchor.y, 4, GREEN);

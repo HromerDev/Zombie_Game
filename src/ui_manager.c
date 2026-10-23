@@ -65,12 +65,16 @@ void updateUIElementPositions() {
 
 void handleMousePointer() {
 
-    mousePointer.sprite->textureArea.x = mousePositionGlobal.x - mousePointer.sprite->textureArea.width / 2;
-    mousePointer.sprite->textureArea.y = mousePositionGlobal.y - mousePointer.sprite->textureArea.height / 2;
+    moveSprite(mousePointer.sprite,mousePositionGlobal.x - mousePointer.sprite->textureArea.width / 2 , mousePositionGlobal.y - mousePointer.sprite->textureArea.width / 2);
 
+    if(IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+        mousePointer.sprite->color = YELLOW;
+    else if(IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
+        mousePointer.sprite->color = BLUE;
+    else
+        mousePointer.sprite->color = WHITE;
     updateSpriteAnchors(mousePointer.sprite);
 
-DrawCircleLines(mousePointer.sprite->centerAnchor.x, mousePointer.sprite->centerAnchor.y, mousePointer.circleCollider, GREEN);
 }
 
 void freeUIContainers() {

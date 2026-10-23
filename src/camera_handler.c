@@ -9,7 +9,7 @@ Camera2D camera;
 Vector2 mousePositionLocal;
 Vector2 mousePositionGlobal;
 
-double UNIT_PIXEL_SIZE = 0;
+int UNIT_PIXEL_SIZE = 0;
 int scaler = 60;
 bool isToggledFullscreen = false;
 int SCREENWIDTHPREFULLSCREEN;
@@ -40,8 +40,14 @@ void cameraInit() {
 
 void changeResolution(int newScreenWidth, int newScreenHeight) {
 
-    double shortestScreenSide = (newScreenWidth < newScreenHeight) ? newScreenWidth : newScreenHeight;
-    double newUnitSize = shortestScreenSide / scaler;
+    int shortestScreenSide = (newScreenWidth < newScreenHeight) ? newScreenWidth : newScreenHeight;
+    int newUnitSize = (int)round((double)shortestScreenSide / scaler);
+
+
+    int leftover = newUnitSize % 8;
+    
+    if(leftover != 0)
+        newUnitSize += 8 - leftover; 
 
     recalculateAllUnits(newUnitSize, UNIT_PIXEL_SIZE);
     UNIT_PIXEL_SIZE = newUnitSize;
