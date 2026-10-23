@@ -46,6 +46,7 @@ enum ObjectLayers
 {
     LAYER_TILES,
     LAYER_CURSOR,
+    LAYER_UI,
 };
 
 void initTextures();

@@ -2,6 +2,7 @@
 #define CAMERA_HANDLER_H
 #include "raylib.h"
 #include "object.h"
+
 extern Camera2D camera;
 
 extern Vector2 mousePosition;
@@ -12,6 +13,7 @@ extern Vector2 CAMERA_ANCHOR;
 extern Vector2 CAMERA_ANCHOR_TOP_RIGHT;
 extern Vector2 CAMERA_ANCHOR_BOTTOM_LEFT;
 extern Vector2 CAMERA_ANCHOR_BOTTOM_RIGHT;
+extern Vector2 CAMERA_ANCHOR_CENTER;
 
 extern Vector2 mousePositionLocal;
 extern Vector2 mousePositionGlobal;

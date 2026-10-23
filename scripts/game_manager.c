@@ -2,13 +2,15 @@
 #include "../src/tilemap.h"
 #include "../src/camera_handler.h"
 #include "raylib.h"
-
+#include "../src/ui_manager.h"  
+#include "../src/object.h"
 int SCREENWIDTH = 500;
 int SCREENHEIGHT = 500;
 double delta = 0;
 int FPS = 0;
 Font font;
 int cameraSpeed = 20;
+UIContainer* debug;
 
 void start() //initializations
 {
@@ -17,6 +19,7 @@ void start() //initializations
     font = LoadFontEx("assets/fonts/tiny5.ttf", 30, 0, 250);
     SetTargetFPS(FPS);
     SetWindowState(FLAG_VSYNC_HINT); 
+    HideCursor();
 }
 
 void gameStart()
@@ -26,9 +29,15 @@ void gameStart()
     initParticleSystem();
 
     cameraInit();
-    initTiles();
+    initUIContainers(); 
 
+    initTiles();
     loadMap("debug_map.mapdata");
+
+    debug = createUIContainer();
+    configureUIContainer(debug, &CAMERA_ANCHOR_TOP_RIGHT.x, &CAMERA_ANCHOR.y);
+    
+    debug->sprites[0] = createSprite((Rectangle){-2,0,2,2}, TEXTURE_CURSOR, LAYER_UI, 0);
 }
 
 void restart() 
@@ -78,5 +87,6 @@ void freeCoreComponents()
     freeObjects();
     freeTimers();
     freeParticles();
+    freeUIContainers();
     UnloadFont(font);
 }
