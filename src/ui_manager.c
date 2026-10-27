@@ -14,7 +14,7 @@ void initUIContainers() {
     dynarray_init(allUIContainers, 1);
 
     mousePointer.sprite = createSprite((Rectangle){-1,-1, 2,2}, TEXTURE_CURSOR, LAYER_CURSOR);
-    mousePointer.circleCollider = mousePointer.sprite->textureArea.width / 2;
+    mousePointer.circleCollider = mousePointer.sprite->position.area.width / 2;
 }
 
 UIContainer* createUIContainer() {
@@ -22,7 +22,7 @@ UIContainer* createUIContainer() {
     UIContainer* temp = malloc(sizeof(UIContainer));
     
     temp->sprites = malloc(sizeof(Sprite*) * DEFAULT_CONTAINER_CAPACITY);
-    temp->text = malloc(sizeof(char) * 64 * DEFAULT_CONTAINER_CAPACITY);
+    temp->textUIElements = malloc(sizeof(char) * 64 * DEFAULT_CONTAINER_CAPACITY);
    
     
     for(size_t i = 0; i < DEFAULT_CONTAINER_CAPACITY; i++) 
@@ -33,10 +33,9 @@ UIContainer* createUIContainer() {
     return temp;
 }
 
-void configureUIContainer(UIContainer* uiContainer, float* x, float* y) {
-    
-   uiContainer->anchorX = x;
-   uiContainer->anchorY = y;
+void configureUIContainer(UIContainer* uiContainer, int anchor) {
+
+    uiContainer->anchor = anchor;
 }
 
 void updateUIElementPositions() {
@@ -53,14 +52,14 @@ void updateUIElementPositions() {
             if(temp->sprites[j] == NULL)
                 continue;
             
-            moveSprite(temp->sprites[j], *temp->anchorX + temp->sprites[j]->originalArea.x * UNIT_PIXEL_SIZE, *temp->anchorY + temp->sprites[j]->originalArea.y * UNIT_PIXEL_SIZE, ANCHOR_ORIGIN);
+            movePosition(&temp->sprites[j]->position, camera.position.anchors[temp->anchor].x + temp->sprites[j]->originalArea.x * UNIT_PIXEL_SIZE, camera.position.anchors[temp->anchor].y + temp->sprites[j]->originalArea.y * UNIT_PIXEL_SIZE, ANCHOR_ORIGIN);
         }
     }
 }
 
 void handleMousePointer() {
 
-    moveSprite(mousePointer.sprite, mousePointer.mousePositionGlobal.x, mousePointer.mousePositionGlobal.y, ANCHOR_CENTER);
+    movePosition(&mousePointer.sprite->position, mousePointer.mousePositionGlobal.x, mousePointer.mousePositionGlobal.y, ANCHOR_CENTER);
 
     if(IsMouseButtonDown(MOUSE_BUTTON_LEFT))
         mousePointer.sprite->color = YELLOW;
@@ -78,7 +77,7 @@ void freeUIContainers() {
     for(size_t i = 0; i < allUIContainers->size; i++) {
         
         UIContainer* temp = allUIContainers->items[i];
-        free(temp->text);
+        free(temp->textUIElements);
         free(temp->sprites);
     }
     dynarray_free(allUIContainers);

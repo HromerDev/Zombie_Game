@@ -4,10 +4,17 @@
 
 extern Texture2D textureArray[10];
 extern Sound sounds[10];
-typedef struct 
-{    
+
+typedef struct {
+
     Vector2 anchors[5];
-    Rectangle textureArea;
+    Rectangle area;
+
+} Position;
+
+typedef struct 
+{   
+    Position position;
     Rectangle originalArea;
     Color color;
     unsigned short opacity;
@@ -18,10 +25,9 @@ typedef struct
 
 typedef struct  
 {
-    Vector2 anchors[5];
+    Position position;
     Vector2 spriteOffset;
     Rectangle originalCollider;
-    Rectangle collider;
     Sprite *sprite;
     double angle;
 } Object;
@@ -60,12 +66,9 @@ Sprite* createSprite(Rectangle area, unsigned int texture, unsigned int layer);
 
 void destroyObject(Object *object);
 void destroySprite(Sprite *sprite);
-void updateObjectAnchors(Object *object, int anchor);
-void updateSpriteAnchors(Sprite *sprite, int anchor);
-void moveObject(Object *object, float x, float y, int anchor);
-void moveObjectRelative(Object *object, float x, float y, int anchor);
-void moveSprite(Sprite *sprite, float x, float y, int anchor);
-void moveSpriteRelative(Sprite *sprite, float x, float y, int anchor);
+void updatePositionAnchors(Position* positionData, int anchor);
+void movePosition(Position* position, float x, float y, int anchor);
+void movePositionRelative(Position* position, float x, float y, int anchor);
 void drawSprites();
 //void allObjectsLayerSort(); 
 void recalculateAllUnits(double newUnitSize, double oldUnitSize);

@@ -26,13 +26,6 @@ void initTextures() {
 
     SetTextureFilter(textureArray[TEXTURE_DEBUG], TEXTURE_FILTER_POINT);
     SetTextureFilter(textureArray[TEXTURE_CURSOR], TEXTURE_FILTER_POINT);
-    //textureArray[TEXTURE_PLAYER] = LoadTexture("assets/player.png");
-    //textureArray[TEXTURE_PIPE1] = LoadTexture("assets/pipe1.png");
-    //textureArray[TEXTURE_PIPE2] = LoadTexture("assets/pipe2.png");
-    //textureArray[TEXTURE_PARTICLE] = LoadTexture("assets/particle4.png");
-
-    //sounds[SOUND_DEATH] = LoadSound("assets/death.wav");
-    //sounds[SOUND_SCORE] = LoadSound("assets/score.wav");
 }
 
 Object* createObject(Rectangle collider, Sprite *sprite) {
@@ -40,19 +33,19 @@ Object* createObject(Rectangle collider, Sprite *sprite) {
     Object *object = malloc(sizeof(Object));
     object->originalCollider = collider;
 
-    object->collider = (Rectangle){collider.x * UNIT_PIXEL_SIZE, collider.y * UNIT_PIXEL_SIZE, collider.width * UNIT_PIXEL_SIZE, collider.height * UNIT_PIXEL_SIZE};
+    object->position.area = (Rectangle){collider.x * UNIT_PIXEL_SIZE, collider.y * UNIT_PIXEL_SIZE, collider.width * UNIT_PIXEL_SIZE, collider.height * UNIT_PIXEL_SIZE};
 
-    object->anchors[ANCHOR_ORIGIN].x = collider.x;
-    object->anchors[ANCHOR_ORIGIN].y = collider.y;
+    object->position.anchors[ANCHOR_ORIGIN].x = collider.x;
+    object->position.anchors[ANCHOR_ORIGIN].y = collider.y;
 
     object->sprite = sprite;
     object->angle = 0;
     
     object->spriteOffset = (Vector2){0,0};
 
-    updateObjectAnchors(object, ANCHOR_ORIGIN);
+    updatePositionAnchors(&object->position, ANCHOR_ORIGIN);
 
-    moveSprite(object->sprite, object->anchors[ANCHOR_CENTER].x + object->spriteOffset.x, object->anchors[ANCHOR_CENTER].y + object->spriteOffset.y, ANCHOR_CENTER);  
+    movePosition(&object->sprite->position, object->position.anchors[ANCHOR_CENTER].x + object->spriteOffset.x, object->position.anchors[ANCHOR_CENTER].y + object->spriteOffset.y, ANCHOR_CENTER);  
     dynarray_push(allObjects, object);
     
     return object;
@@ -64,7 +57,7 @@ Sprite* createSprite(Rectangle textureArea, unsigned int texture, unsigned int l
     sprite->originalArea = textureArea;
     sprite->color = WHITE;
     
-    sprite->textureArea = (Rectangle) {
+    sprite->position.area = (Rectangle) {
         
         textureArea.x * UNIT_PIXEL_SIZE,
         textureArea.y * UNIT_PIXEL_SIZE,
@@ -77,7 +70,7 @@ Sprite* createSprite(Rectangle textureArea, unsigned int texture, unsigned int l
     sprite->angle = 0;
     sprite->opacity = 255;
 
-    updateSpriteAnchors(sprite, ANCHOR_ORIGIN);
+    updatePositionAnchors(&sprite->position, ANCHOR_ORIGIN);
     dynarray_push(allSprites, sprite);
 
     // Binary search for the insertion position.
@@ -134,6 +127,89 @@ void destroyObject(Object *object) {
     dynarray_remove(allObjects, object);
 }
 
+void updatePositionAnchors(Position* positionData, int anchor) {
+
+    anchor = (anchor <= ANCHOR_CENTER) ? anchor : ANCHOR_ORIGIN;
+
+    switch(anchor) {
+
+        case ANCHOR_ORIGIN:
+
+            positionData->anchors[ANCHOR_TOP_RIGHT].x = positionData->anchors[ANCHOR_ORIGIN].x + positionData->area.width;
+            positionData->anchors[ANCHOR_TOP_RIGHT].y = positionData->anchors[ANCHOR_ORIGIN].y;
+
+            positionData->anchors[ANCHOR_BOTTOM_LEFT].x = positionData->anchors[ANCHOR_ORIGIN].x;
+            positionData->anchors[ANCHOR_BOTTOM_LEFT].y = positionData->anchors[ANCHOR_ORIGIN].y + positionData->area.height;
+
+            positionData->anchors[ANCHOR_BOTTOM_RIGHT].x = positionData->anchors[ANCHOR_BOTTOM_LEFT].x + positionData->area.width;
+            positionData->anchors[ANCHOR_BOTTOM_RIGHT].y = positionData->anchors[ANCHOR_BOTTOM_LEFT].y;
+
+            positionData->anchors[ANCHOR_CENTER].x = positionData->anchors[ANCHOR_ORIGIN].x + positionData->area.width / 2;
+            positionData->anchors[ANCHOR_CENTER].y = positionData->anchors[ANCHOR_ORIGIN].y + positionData->area.height / 2;
+            break;
+
+        case ANCHOR_TOP_RIGHT:
+
+            positionData->anchors[ANCHOR_ORIGIN].x = positionData->anchors[ANCHOR_TOP_RIGHT].x - positionData->area.width;
+            positionData->anchors[ANCHOR_ORIGIN].y = positionData->anchors[ANCHOR_TOP_RIGHT].y;
+            
+            positionData->anchors[ANCHOR_BOTTOM_LEFT].x = positionData->anchors[ANCHOR_ORIGIN].x;
+            positionData->anchors[ANCHOR_BOTTOM_LEFT].y = positionData->anchors[ANCHOR_ORIGIN].y + positionData->area.height;
+
+            positionData->anchors[ANCHOR_BOTTOM_RIGHT].x = positionData->anchors[ANCHOR_BOTTOM_LEFT].x + positionData->area.width;
+            positionData->anchors[ANCHOR_BOTTOM_RIGHT].y = positionData->anchors[ANCHOR_BOTTOM_LEFT].y;
+
+            positionData->anchors[ANCHOR_CENTER].x = positionData->anchors[ANCHOR_ORIGIN].x + positionData->area.width / 2;
+            positionData->anchors[ANCHOR_CENTER].y = positionData->anchors[ANCHOR_ORIGIN].y + positionData->area.height / 2;   
+            break;
+
+        case ANCHOR_BOTTOM_LEFT:
+
+            positionData->anchors[ANCHOR_ORIGIN].x = positionData->anchors[ANCHOR_BOTTOM_LEFT].x;
+            positionData->anchors[ANCHOR_ORIGIN].y = positionData->anchors[ANCHOR_BOTTOM_LEFT].y - positionData->area.height;
+
+            positionData->anchors[ANCHOR_TOP_RIGHT].x = positionData->anchors[ANCHOR_ORIGIN].x + positionData->area.width;
+            positionData->anchors[ANCHOR_TOP_RIGHT].y = positionData->anchors[ANCHOR_ORIGIN].y;
+            
+            positionData->anchors[ANCHOR_BOTTOM_RIGHT].x = positionData->anchors[ANCHOR_BOTTOM_LEFT].x + positionData->area.width;
+            positionData->anchors[ANCHOR_BOTTOM_RIGHT].y = positionData->anchors[ANCHOR_BOTTOM_LEFT].y;
+
+            positionData->anchors[ANCHOR_CENTER].x = positionData->anchors[ANCHOR_ORIGIN].x + positionData->area.width / 2;
+            positionData->anchors[ANCHOR_CENTER].y = positionData->anchors[ANCHOR_ORIGIN].y + positionData->area.height / 2;   
+            break;
+
+        case ANCHOR_BOTTOM_RIGHT:
+
+            positionData->anchors[ANCHOR_ORIGIN].x = positionData->anchors[ANCHOR_BOTTOM_RIGHT].x - positionData->area.width;
+            positionData->anchors[ANCHOR_ORIGIN].y = positionData->anchors[ANCHOR_BOTTOM_RIGHT].y - positionData->area.height;
+
+            positionData->anchors[ANCHOR_TOP_RIGHT].x = positionData->anchors[ANCHOR_ORIGIN].x + positionData->area.width;
+            positionData->anchors[ANCHOR_TOP_RIGHT].y = positionData->anchors[ANCHOR_ORIGIN].y;
+
+            positionData->anchors[ANCHOR_BOTTOM_LEFT].x = positionData->anchors[ANCHOR_ORIGIN].x;
+            positionData->anchors[ANCHOR_BOTTOM_LEFT].y = positionData->anchors[ANCHOR_ORIGIN].y + positionData->area.height;
+
+            positionData->anchors[ANCHOR_CENTER].x = positionData->anchors[ANCHOR_ORIGIN].x + positionData->area.width / 2;
+            positionData->anchors[ANCHOR_CENTER].y = positionData->anchors[ANCHOR_ORIGIN].y + positionData->area.height / 2;   
+            break;
+
+        case ANCHOR_CENTER:
+
+            positionData->anchors[ANCHOR_ORIGIN].x = positionData->anchors[ANCHOR_CENTER].x - positionData->area.width / 2;
+            positionData->anchors[ANCHOR_ORIGIN].y = positionData->anchors[ANCHOR_CENTER].y - positionData->area.height / 2;
+
+            positionData->anchors[ANCHOR_TOP_RIGHT].x = positionData->anchors[ANCHOR_ORIGIN].x + positionData->area.width;
+            positionData->anchors[ANCHOR_TOP_RIGHT].y = positionData->anchors[ANCHOR_ORIGIN].y;
+            
+            positionData->anchors[ANCHOR_BOTTOM_LEFT].x = positionData->anchors[ANCHOR_ORIGIN].x;
+            positionData->anchors[ANCHOR_BOTTOM_LEFT].y = positionData->anchors[ANCHOR_ORIGIN].y + positionData->area.height;
+            
+            positionData->anchors[ANCHOR_BOTTOM_RIGHT].x = positionData->anchors[ANCHOR_BOTTOM_LEFT].x + positionData->area.width;
+            positionData->anchors[ANCHOR_BOTTOM_RIGHT].y = positionData->anchors[ANCHOR_BOTTOM_LEFT].y;
+            break;
+    }
+}
+/*
 void updateObjectAnchors(Object *object, int anchor) {
 
     anchor = (anchor <= ANCHOR_CENTER) ? anchor : ANCHOR_ORIGIN;
@@ -183,7 +259,6 @@ void updateObjectAnchors(Object *object, int anchor) {
 
             object->anchors[ANCHOR_CENTER].x = object->anchors[ANCHOR_ORIGIN].x + object->collider.width / 2;
             object->anchors[ANCHOR_CENTER].y = object->anchors[ANCHOR_ORIGIN].y + object->collider.height / 2;   
-            
             break;
 
         case ANCHOR_BOTTOM_RIGHT:
@@ -199,8 +274,10 @@ void updateObjectAnchors(Object *object, int anchor) {
 
             object->anchors[ANCHOR_CENTER].x = object->anchors[ANCHOR_ORIGIN].x + object->collider.width / 2;
             object->anchors[ANCHOR_CENTER].y = object->anchors[ANCHOR_ORIGIN].y + object->collider.height / 2;   
+            break;
 
         case ANCHOR_CENTER:
+
             object->anchors[ANCHOR_ORIGIN].x = object->anchors[ANCHOR_CENTER].x - object->collider.width / 2;
             object->anchors[ANCHOR_ORIGIN].y = object->anchors[ANCHOR_CENTER].y - object->collider.height / 2;
 
@@ -265,7 +342,6 @@ void updateSpriteAnchors(Sprite *sprite, int anchor) {
 
             sprite->anchors[ANCHOR_CENTER].x = sprite->anchors[ANCHOR_ORIGIN].x + sprite->textureArea.width / 2;
             sprite->anchors[ANCHOR_CENTER].y = sprite->anchors[ANCHOR_ORIGIN].y + sprite->textureArea.height / 2;   
-            
             break;
 
         case ANCHOR_BOTTOM_RIGHT:
@@ -281,6 +357,7 @@ void updateSpriteAnchors(Sprite *sprite, int anchor) {
 
             sprite->anchors[ANCHOR_CENTER].x = sprite->anchors[ANCHOR_ORIGIN].x + sprite->textureArea.width / 2;
             sprite->anchors[ANCHOR_CENTER].y = sprite->anchors[ANCHOR_ORIGIN].y + sprite->textureArea.height / 2;   
+            break;
 
         case ANCHOR_CENTER:
             sprite->anchors[ANCHOR_ORIGIN].x = sprite->anchors[ANCHOR_CENTER].x - sprite->textureArea.width / 2;
@@ -297,31 +374,33 @@ void updateSpriteAnchors(Sprite *sprite, int anchor) {
             break;
     }
 }
-
-void moveSprite(Sprite *sprite, float x, float y, int anchor) {
+*/
+void movePosition(Position* positionData, float x, float y, int anchor) {
    
     anchor = (anchor <= ANCHOR_CENTER) ? anchor : ANCHOR_ORIGIN;
 
-    sprite->anchors[anchor].x = x;
-    sprite->anchors[anchor].y = y;
+    positionData->anchors[anchor].x = x;
+    positionData->anchors[anchor].y = y;
             
-    updateSpriteAnchors(sprite, anchor);
+    updatePositionAnchors(positionData, anchor);
+
+    positionData->area.x = positionData->anchors[ANCHOR_ORIGIN].x;
+    positionData->area.y = positionData->anchors[ANCHOR_ORIGIN].y;
 }
 
-void moveSpriteRelative(Sprite *sprite, float x, float y, int anchor) {
+void movePositionRelative(Position* positionData, float x, float y, int anchor) {
 
     anchor = (anchor <= ANCHOR_CENTER) ? anchor : ANCHOR_ORIGIN;
 
-    sprite->anchors[anchor].x += x * UNIT_PIXEL_SIZE;
-    sprite->anchors[anchor].y += y * UNIT_PIXEL_SIZE;
+    positionData->anchors[anchor].x += x * UNIT_PIXEL_SIZE;
+    positionData->anchors[anchor].y += y * UNIT_PIXEL_SIZE;
 
-    updateSpriteAnchors(sprite, anchor);
+    updatePositionAnchors(positionData, anchor);
 
-
-    sprite->textureArea.x = sprite->anchors[ANCHOR_ORIGIN].x;
-    sprite->textureArea.y = sprite->anchors[ANCHOR_ORIGIN].y;
+    positionData->area.x = positionData->anchors[ANCHOR_ORIGIN].x;
+    positionData->area.y = positionData->anchors[ANCHOR_ORIGIN].y;
 }
-
+/*
 void moveObject(Object *object, float x, float y, int anchor) {
 
     object->anchors[anchor].x = x * UNIT_PIXEL_SIZE;
@@ -347,14 +426,14 @@ void moveObjectRelative(Object *object, float x, float y, int anchor) {
     if(object->sprite != NULL)     
         moveSprite(object->sprite, object->anchors[ANCHOR_CENTER].x + object->spriteOffset.x, object->anchors[ANCHOR_CENTER].y + object->spriteOffset.y, ANCHOR_CENTER);
 }
-
+*/
 void drawSprites() {
     
     for(int i = 0; i < allSprites->size; i++) {
 
         Sprite *temp = allSprites->items[i];
         
-        DrawTexturePro(textureArray[temp->texture], (Rectangle){0,0, textureArray[temp->texture].width, textureArray[temp->texture].height}, (Rectangle) {temp->anchors[ANCHOR_CENTER].x , temp->anchors[ANCHOR_CENTER].y, temp->textureArea.width, temp->textureArea.height}, (Vector2){temp->textureArea.width / 2,temp->textureArea.height / 2}, temp->angle, (Color) {temp->color.r,temp->color.g,temp->color.b,temp->opacity});
+        DrawTexturePro(textureArray[temp->texture], (Rectangle){0,0, textureArray[temp->texture].width, textureArray[temp->texture].height}, (Rectangle) {temp->position.anchors[ANCHOR_CENTER].x , temp->position.anchors[ANCHOR_CENTER].y, temp->position.area.width, temp->position.area.height}, (Vector2){temp->position.area.width / 2,temp->position.area.height / 2}, temp->angle, (Color) {temp->color.r,temp->color.g,temp->color.b,temp->opacity});
         /*
         DrawCircle(temp->topLeftAnchor.x, temp->topLeftAnchor.y, 4, GREEN);
         DrawCircle(temp->topRightAnchor.x, temp->topRightAnchor.y, 4, GREEN);
@@ -386,14 +465,14 @@ void recalculateAllUnits(double newUnitSize, double oldUnitSize) {
 
             Object *object = allObjects->items[i];
             
-            object->anchors[ANCHOR_ORIGIN].x *= difference;
-            object->anchors[ANCHOR_ORIGIN].y *= difference;
-            object->collider.width *= difference;
-            object->collider.height *= difference; 
+            object->position.anchors[ANCHOR_ORIGIN].x *= difference;
+            object->position.anchors[ANCHOR_ORIGIN].y *= difference;
+            object->position.area.width *= difference;
+            object->position.area.height *= difference; 
 
-            updateObjectAnchors(object, ANCHOR_ORIGIN);
-            object->collider.x = object->anchors[ANCHOR_ORIGIN].x;
-            object->collider.y = object->anchors[ANCHOR_ORIGIN].y;
+            updatePositionAnchors(&object->position, ANCHOR_ORIGIN);
+            object->position.area.x = object->position.anchors[ANCHOR_ORIGIN].x;
+            object->position.area.y = object->position.anchors[ANCHOR_ORIGIN].y;
         }
     }
 
@@ -402,14 +481,14 @@ void recalculateAllUnits(double newUnitSize, double oldUnitSize) {
         for (int i = 0; i < allSprites->size; i++) {
 
             Sprite *sprite = allSprites->items[i];
-            sprite->anchors[ANCHOR_ORIGIN].x *= difference;
-            sprite->anchors[ANCHOR_ORIGIN].y *= difference;
-            sprite->textureArea.width *= difference;
-            sprite->textureArea.height *= difference;
+            sprite->position.anchors[ANCHOR_ORIGIN].x *= difference;
+            sprite->position.anchors[ANCHOR_ORIGIN].y *= difference;
+            sprite->position.area.width *= difference;
+            sprite->position.area.height *= difference;
 
-            updateSpriteAnchors(sprite, ANCHOR_ORIGIN);
-            sprite->textureArea.x = sprite->anchors[ANCHOR_ORIGIN].x;
-            sprite->textureArea.y = sprite->anchors[ANCHOR_ORIGIN].y;
+            updatePositionAnchors(&sprite->position, ANCHOR_ORIGIN);
+            sprite->position.area.x = sprite->position.anchors[ANCHOR_ORIGIN].x;
+            sprite->position.area.y = sprite->position.anchors[ANCHOR_ORIGIN].y;
         }
     }
 

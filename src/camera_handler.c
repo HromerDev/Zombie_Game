@@ -15,11 +15,11 @@ int SCREENHEIGHTPREFULLSCREEN;
 
 void recalculateCameraAnchors() {
 
-    camera.anchors[ANCHOR_ORIGIN] = camera.camera.target;
-    camera.anchors[ANCHOR_TOP_RIGHT] = (Vector2){camera.anchors[ANCHOR_ORIGIN].x + SCREENWIDTH, camera.anchors[ANCHOR_ORIGIN].y};
-    camera.anchors[ANCHOR_BOTTOM_LEFT] = (Vector2){camera.anchors[ANCHOR_ORIGIN].x, camera.anchors[ANCHOR_ORIGIN].y + SCREENHEIGHT};
-    camera.anchors[ANCHOR_BOTTOM_RIGHT] = (Vector2){camera.anchors[ANCHOR_TOP_RIGHT].x, camera.anchors[ANCHOR_BOTTOM_LEFT].y};
-    camera.anchors[ANCHOR_CENTER] = (Vector2) {camera.anchors[ANCHOR_ORIGIN].x + (float)SCREENWIDTH / 2, camera.anchors[ANCHOR_ORIGIN].x + (float)SCREENHEIGHT / 2};
+    camera.position.anchors[ANCHOR_ORIGIN] = camera.camera.target;
+    camera.position.anchors[ANCHOR_TOP_RIGHT] = (Vector2){camera.position.anchors[ANCHOR_ORIGIN].x + SCREENWIDTH, camera.position.anchors[ANCHOR_ORIGIN].y};
+    camera.position.anchors[ANCHOR_BOTTOM_LEFT] = (Vector2){camera.position.anchors[ANCHOR_ORIGIN].x, camera.position.anchors[ANCHOR_ORIGIN].y + SCREENHEIGHT};
+    camera.position.anchors[ANCHOR_BOTTOM_RIGHT] = (Vector2){camera.position.anchors[ANCHOR_TOP_RIGHT].x, camera.position.anchors[ANCHOR_BOTTOM_LEFT].y};
+    camera.position.anchors[ANCHOR_CENTER] = (Vector2) {camera.position.anchors[ANCHOR_ORIGIN].x + (float)SCREENWIDTH / 2, camera.position.anchors[ANCHOR_ORIGIN].y + (float)SCREENHEIGHT / 2};
 
     updateUIElementPositions();
 }
@@ -52,7 +52,7 @@ void changeResolution(int newScreenWidth, int newScreenHeight) {
     recalculateCameraAnchors();
 
     if(mousePointer.sprite != NULL)
-        mousePointer.circleCollider = mousePointer.sprite->textureArea.width / 2;
+        mousePointer.circleCollider = mousePointer.sprite->position.area.width / 2;
 
     SetWindowSize(SCREENWIDTH, SCREENHEIGHT);
 }

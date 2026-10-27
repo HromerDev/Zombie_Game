@@ -7,7 +7,7 @@
 
 typedef struct 
 {
-    Vector2 origin;
+    //Vector2 origin;
     Sprite* sprite; 
     bool isEnabled;
     float timeAlive;
@@ -38,7 +38,7 @@ void initParticleSystem();
 ParticleHandler* createParticleHandler(Vector2 origin, Sprite* sprite);
 void configureParticleHandler(ParticleHandler* particleHandler, Vector2 particleMinMaxSpawnDistanceRange, Vector2 particleMinMaxRotationRange, Vector2 particleMinMaxSizeRange, float particleAliveTime, int particlesPerSecond);
 void moveParticleHandler(ParticleHandler* particleHandler, Vector2 newPosition);
-void moveParticlesRelative(ParticleHandler* particleHandler, Vector2 newPosition);
+//void moveParticlesRelative(ParticleHandler* particleHandler, Vector2 newPosition);
 void emitParticles(ParticleHandler* particleHandler);
 int returnParticleAliveAmount(ParticleHandler* particleHandler);
 void handleParticles();

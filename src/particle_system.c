@@ -64,13 +64,8 @@ void moveParticleHandler(ParticleHandler* particleHandler, Vector2 newPosition) 
 void moveParticlesRelative(ParticleHandler* particleHandler, Vector2 newPosition) {
 
     for (size_t i = 0; i < particleHandler->particleAmount; i++)
-    {        
         if(particleHandler->particles[i]->isEnabled)  
-        {
-            particleHandler->particles[i]->origin = Vector2Add(particleHandler->particles[i]->origin, newPosition);
-            particleHandler->particles[i]->sprite->anchors[ANCHOR_CENTER] = particleHandler->particles[i]->origin;
-        }
-    }
+            movePositionRelative(&particleHandler->particles[i]->sprite->position, newPosition.x, newPosition.y, ANCHOR_CENTER);
 }
 
 void handleParticles() 
@@ -94,7 +89,6 @@ void handleParticles()
         }
 
         temp->sprite->opacity = 255 * (1.0f - temp->timeAlive / temp->particleAliveTime);
-        
     }
 }
 
@@ -120,10 +114,10 @@ void emitParticles(ParticleHandler* particleHandler)
 
         //particleHandler->sprite->opacity = particleHandler->particles[particleHandler->currentParticleEmitted]->opacity;
 
-        particleHandler->particles[particleHandler->currentParticleEmitted]->origin = Vector2Add(particleHandler->origin, (Vector2){randomParticleDistanceX, randomParticleDistanceY});
+        movePositionRelative(&particleHandler->particles[particleHandler->currentParticleEmitted]->sprite->position, particleHandler->origin.x + randomParticleDistanceX, particleHandler->origin.y + randomParticleDistanceY, ANCHOR_CENTER);
         particleHandler->particles[particleHandler->currentParticleEmitted]->sprite->angle = GetRandomValue(particleHandler->particleMinMaxRotationRange.x, particleHandler->particleMinMaxRotationRange.y);
-        particleHandler->particles[particleHandler->currentParticleEmitted]->sprite->textureArea.width = GetRandomValue(particleHandler->particleMinMaxSizeRange.x * UNIT_PIXEL_SIZE, particleHandler->particleMinMaxSizeRange.y* UNIT_PIXEL_SIZE);
-        particleHandler->particles[particleHandler->currentParticleEmitted]->sprite->textureArea.height = particleHandler->particles[particleHandler->currentParticleEmitted]->sprite->textureArea.width;
+        particleHandler->particles[particleHandler->currentParticleEmitted]->sprite->position.area.width = GetRandomValue(particleHandler->particleMinMaxSizeRange.x * UNIT_PIXEL_SIZE, particleHandler->particleMinMaxSizeRange.y* UNIT_PIXEL_SIZE);
+        particleHandler->particles[particleHandler->currentParticleEmitted]->sprite->position.area.height = particleHandler->particles[particleHandler->currentParticleEmitted]->sprite->position.area.width;
         particleHandler->particles[particleHandler->currentParticleEmitted]->timeAlive = 0;
         particleHandler->particles[particleHandler->currentParticleEmitted]->isEnabled = true;
         particleHandler->currentParticleEmitted++;

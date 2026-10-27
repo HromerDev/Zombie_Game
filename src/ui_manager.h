@@ -2,11 +2,20 @@
 #define UI_MANAGER_H
 #include "dynamic_array.h"
 #include "object.h"
+#include "raylib.h"
+
 typedef struct {
 
-    float* anchorX;
-    float* anchorY;
-    char (*text)[64];
+    Rectangle textArea;
+    Vector2 anchors[5];
+    char* text;
+
+} TextUIElement;
+
+typedef struct {
+
+    int anchor;
+    TextUIElement* textUIElements;
     Sprite** sprites;
     //Button* buttons
 
@@ -25,7 +34,7 @@ extern MousePointer mousePointer;
 
 void initUIContainers();
 UIContainer* createUIContainer();
-void configureUIContainer(UIContainer* uiContainer, float* x, float* y);
+void configureUIContainer(UIContainer* uiContainer, int anchor);
 void updateUIElementPositions();
 
 void handleMousePointer();

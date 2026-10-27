@@ -64,10 +64,10 @@ void drawMap() {
     int mapWidth = CURRENTLY_LOADED_MAP.width;
     int mapHeight = CURRENTLY_LOADED_MAP.height;
     
-    int cameraLeftSide = camera.anchors[ANCHOR_ORIGIN].x;
-    int cameraRightSide = camera.anchors[ANCHOR_TOP_RIGHT].x;
-    int cameraTopSide = camera.anchors[ANCHOR_ORIGIN].y;
-    int cameraBottomSide = camera.anchors[ANCHOR_BOTTOM_RIGHT].y;
+    int cameraLeftSide = camera.position.anchors[ANCHOR_ORIGIN].x;
+    int cameraRightSide = camera.position.anchors[ANCHOR_TOP_RIGHT].x;
+    int cameraTopSide = camera.position.anchors[ANCHOR_ORIGIN].y;
+    int cameraBottomSide = camera.position.anchors[ANCHOR_BOTTOM_RIGHT].y;
     
     int drawStartX = cameraLeftSide / tileSize;
     int drawStartY = cameraTopSide / tileSize;

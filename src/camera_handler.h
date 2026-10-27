@@ -11,7 +11,7 @@ extern int UNIT_PIXEL_SIZE;
 typedef struct {
 
     Camera2D camera;
-    Vector2 anchors[5];
+    Position position;
 
 } CameraProperties;
 
