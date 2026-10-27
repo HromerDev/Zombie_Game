@@ -4,10 +4,10 @@
 #include "raylib.h"
 #include "../src/ui_manager.h"  
 #include "../src/object.h"
-int SCREENWIDTH = 1000;
+int SCREENWIDTH = 500;
 int SCREENHEIGHT = 500;
 double delta = 0;
-int FPS = 60;
+int FPS = 0;
 Font font;
 int cameraSpeed = 20;
 UIContainer* debug;
@@ -35,9 +35,10 @@ void gameStart()
     loadMap("debug_map.mapdata");
 
     debug = createUIContainer();
-    configureUIContainer(debug, &CAMERA_ANCHOR_TOP_RIGHT.x, &CAMERA_ANCHOR.y);
+    configureUIContainer(debug, &camera.anchors[ANCHOR_TOP_RIGHT].x, &camera.anchors[ANCHOR_TOP_RIGHT].y);
     
-    debug->sprites[0] = createSprite((Rectangle){-2,0,2,2}, TEXTURE_CURSOR, LAYER_UI, 0);
+    debug->sprites[0] = createSprite((Rectangle){-4,0,4,4}, TEXTURE_CURSOR, LAYER_UI);
+
 }
 
 void restart() 
@@ -68,13 +69,13 @@ void update() //input handling, logic
 
 void draw() //drawing a frame (primarely for text)
 {
-    DrawTextEx(font, TextFormat("X: %.0f, Y:%.0f", mousePositionLocal.x, mousePositionLocal.y), (Vector2){(int)(round(camera.target.x + 10)),(int)(round(camera.target.y + 10))},font.baseSize, 0, YELLOW);
+    DrawTextEx(font, TextFormat("X: %.0f, Y:%.0f", mousePointer.mousePositionLocal.x, mousePointer.mousePositionLocal.y), (Vector2){(int)(round(camera.anchors[ANCHOR_ORIGIN].x + 10)),(int)(round(camera.anchors[ANCHOR_ORIGIN].y + 10))},font.baseSize, 0, YELLOW);
 
-    DrawText(TextFormat("X: %.0f, Y:%.0f", mousePositionGlobal.x, mousePositionGlobal.y),(int)(round(camera.target.x + 10)), (int)(round(camera.target.y + 40)), 30, YELLOW);
+    DrawText(TextFormat("X: %.0f, Y:%.0f", mousePointer.mousePositionGlobal.x, mousePointer.mousePositionGlobal.y),(int)(round(camera.anchors[ANCHOR_ORIGIN].x + 10)), (int)(round(camera.anchors[ANCHOR_ORIGIN].y + 40)), 30, YELLOW);
 
-    DrawText(TextFormat("unit pixel size:%d pixels",UNIT_PIXEL_SIZE),(int)(round(camera.target.x + 10)), (int)(round(camera.target.y + 70)), 30, YELLOW);
+    DrawText(TextFormat("unit pixel size:%d pixels",UNIT_PIXEL_SIZE),(int)(round(camera.anchors[ANCHOR_ORIGIN].x + 10)), (int)(round(camera.anchors[ANCHOR_ORIGIN].y + 70)), 30, YELLOW);
 
-    DrawText(TextFormat("%.0fFPS", 1 / GetFrameTime()), (int)(round(CAMERA_ANCHOR_BOTTOM_LEFT.x)), (int)(round(CAMERA_ANCHOR_BOTTOM_LEFT.y - 20)), 20, GREEN);
+    DrawText(TextFormat("%.0fFPS", 1 / GetFrameTime()), (int)(round(camera.anchors[ANCHOR_BOTTOM_LEFT].x)), (int)(round(camera.anchors[ANCHOR_BOTTOM_LEFT].y - 20)), 20, GREEN);
 }
 
 void end() 

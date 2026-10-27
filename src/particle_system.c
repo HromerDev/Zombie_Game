@@ -1,6 +1,7 @@
 #include "particle_system.h"
 #include "dynamic_array.h"
 #include "camera_handler.h"
+#include "object.h"
 #include "stdlib.h"
 
 dynarray *allParticleHandlers;
@@ -15,8 +16,8 @@ void initParticleSystem()
     dynarray_init(allParticles, 1);
 }
 
-ParticleHandler* createParticleHandler(Vector2 origin, Sprite* sprite) 
-{
+ParticleHandler* createParticleHandler(Vector2 origin, Sprite* sprite) {
+
     ParticleHandler* particleHandler = malloc(sizeof(ParticleHandler));
     particleHandler->origin = origin;
     particleHandler->originObject = NULL;
@@ -29,8 +30,8 @@ ParticleHandler* createParticleHandler(Vector2 origin, Sprite* sprite)
     return particleHandler;
 }
 
-void configureParticleHandler(ParticleHandler* particleHandler, Vector2 particleMinMaxSpawnDistanceRange, Vector2 particleMinMaxRotationRange, Vector2 particleMinMaxSizeRange, float particleAliveTime, int particlesPerSecond)
-{
+void configureParticleHandler(ParticleHandler* particleHandler, Vector2 particleMinMaxSpawnDistanceRange, Vector2 particleMinMaxRotationRange, Vector2 particleMinMaxSizeRange, float particleAliveTime, int particlesPerSecond) {
+
     particleHandler->particleMinMaxSpawnDistanceRange = particleMinMaxSpawnDistanceRange;
     particleHandler->particleMinMaxRotationRange = particleMinMaxRotationRange;
     particleHandler->particleMinMaxSizeRange = particleMinMaxSizeRange;
@@ -47,7 +48,7 @@ void configureParticleHandler(ParticleHandler* particleHandler, Vector2 particle
         particle->particleAliveTime = particleAliveTime;
         particle->isEnabled = false;
 
-        particle->sprite = createSprite((Rectangle) {0,0,0,0}, particleHandler->sprite->texture, particleHandler->sprite->layer, 0); 
+        particle->sprite = createSprite((Rectangle) {0,0,0,0}, particleHandler->sprite->texture, particleHandler->sprite->layer); 
 
         dynarray_push(allParticles, particle);  
 
@@ -55,23 +56,21 @@ void configureParticleHandler(ParticleHandler* particleHandler, Vector2 particle
     }
 }
 
-void moveParticleHandler(ParticleHandler* particleHandler, Vector2 newPosition) 
-{
+void moveParticleHandler(ParticleHandler* particleHandler, Vector2 newPosition) {
+    
     particleHandler->origin = newPosition;
 }
 
-void moveParticlesRelative(ParticleHandler* particleHandler, Vector2 newPosition) 
-{
+void moveParticlesRelative(ParticleHandler* particleHandler, Vector2 newPosition) {
+
     for (size_t i = 0; i < particleHandler->particleAmount; i++)
     {        
         if(particleHandler->particles[i]->isEnabled)  
         {
             particleHandler->particles[i]->origin = Vector2Add(particleHandler->particles[i]->origin, newPosition);
-            particleHandler->particles[i]->sprite->centerAnchor = particleHandler->particles[i]->origin;
+            particleHandler->particles[i]->sprite->anchors[ANCHOR_CENTER] = particleHandler->particles[i]->origin;
         }
-              
     }
-    
 }
 
 void handleParticles() 

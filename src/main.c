@@ -23,7 +23,7 @@ int main()
         iterateTimers();
 
         BeginDrawing();
-        BeginMode2D(camera);
+        BeginMode2D(camera.camera);
             ClearBackground(BLACK);
             drawMap();
             drawSprites();  

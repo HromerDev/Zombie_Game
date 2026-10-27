@@ -6,10 +6,10 @@ extern Texture2D textureArray[10];
 extern Sound sounds[10];
 typedef struct 
 {    
-    Rectangle originalArea;
-    Vector2 centerAnchor;
-    Color color;
+    Vector2 anchors[5];
     Rectangle textureArea;
+    Rectangle originalArea;
+    Color color;
     unsigned short opacity;
     unsigned int texture;
     double angle;
@@ -18,11 +18,7 @@ typedef struct
 
 typedef struct  
 {
-    Vector2 topLeftAnchor;
-    Vector2 topRightAnchor;
-    Vector2 bottomLeftAnchor;
-    Vector2 bottomRightAnchor;    
-    Vector2 centerAnchor;
+    Vector2 anchors[5];
     Vector2 spriteOffset;
     Rectangle originalCollider;
     Rectangle collider;
@@ -30,38 +26,46 @@ typedef struct
     double angle;
 } Object;
 
-enum Sounds 
-{
+enum Sounds {
+
     SOUND_DEATH,
     SOUND_SCORE,
-
 };
-enum Textures  
-{
+enum Textures {
+
     TEXTURE_AAAA,
     TEXTURE_DEBUG,
     TEXTURE_CURSOR,
 };
 
-enum ObjectLayers 
-{
+enum ObjectLayers {
+
     LAYER_TILES,
     LAYER_CURSOR,
     LAYER_UI,
 };
 
+enum Anchors {
+
+    ANCHOR_ORIGIN,
+    ANCHOR_TOP_RIGHT,
+    ANCHOR_BOTTOM_LEFT,
+    ANCHOR_BOTTOM_RIGHT,
+    ANCHOR_CENTER,
+};
+
 void initTextures();
-Object* createObject(Rectangle collider, Sprite *sprite, double angle);
-Sprite* createSprite(Rectangle area, unsigned int texture, unsigned int layer, double angle);
+Object* createObject(Rectangle collider, Sprite *sprite);
+Sprite* createSprite(Rectangle area, unsigned int texture, unsigned int layer);
 
 void destroyObject(Object *object);
 void destroySprite(Sprite *sprite);
-void updateObjectAnchors(Object *object);
-void updateSpriteAnchors(Sprite *sprite);
-void moveObject(Object *object, float x, float y);
-void moveObjectRelative(Object *object, float x, float y);
-void moveSprite(Sprite *sprite, float x, float y);
-void moveSpriteRelative(Sprite *sprite, float x, float y);
+void updateObjectAnchors(Object *object, int anchor);
+void updateSpriteAnchors(Sprite *sprite, int anchor);
+void moveObject(Object *object, float x, float y, int anchor);
+void moveObjectRelative(Object *object, float x, float y, int anchor);
+void moveSprite(Sprite *sprite, float x, float y, int anchor);
+void moveSpriteRelative(Sprite *sprite, float x, float y, int anchor);
 void drawSprites();
 //void allObjectsLayerSort(); 
 void recalculateAllUnits(double newUnitSize, double oldUnitSize);

@@ -3,22 +3,22 @@
 #include "raylib.h"
 #include "object.h"
 
-extern Camera2D camera;
-
 extern Vector2 mousePosition;
 
 extern int UNIT_PIXEL_SIZE;
 
-extern Vector2 CAMERA_ANCHOR;
-extern Vector2 CAMERA_ANCHOR_TOP_RIGHT;
-extern Vector2 CAMERA_ANCHOR_BOTTOM_LEFT;
-extern Vector2 CAMERA_ANCHOR_BOTTOM_RIGHT;
-extern Vector2 CAMERA_ANCHOR_CENTER;
 
-extern Vector2 mousePositionLocal;
-extern Vector2 mousePositionGlobal;
+typedef struct {
+
+    Camera2D camera;
+    Vector2 anchors[5];
+
+} CameraProperties;
+
+extern CameraProperties camera;
 
 void cameraInit();
+void recalculateCameraAnchors();
 void changeResolution(int newScreenWidth, int newScreenHeight);
 void fullScreenToggle();
 

@@ -1,4 +1,5 @@
 #include "../scripts/game_manager.h"
+#include "object.h"
 #include "stdio.h"
 #include "string.h"
 #include "stdlib.h"
@@ -14,7 +15,7 @@ Map CURRENTLY_LOADED_MAP;
 
 void initTiles() {
 
-    tiles[TILE_GRASS].sprite = createSprite((Rectangle){0,0, TILE_SIZE, TILE_SIZE}, TEXTURE_DEBUG, LAYER_TILES, 0);
+    tiles[TILE_GRASS].sprite = createSprite((Rectangle){0,0, TILE_SIZE, TILE_SIZE}, TEXTURE_DEBUG, LAYER_TILES);
     tiles[TILE_GRASS].sprite->opacity = 0;
 
     CURRENTLY_LOADED_MAP.mapData = NULL;
@@ -63,10 +64,10 @@ void drawMap() {
     int mapWidth = CURRENTLY_LOADED_MAP.width;
     int mapHeight = CURRENTLY_LOADED_MAP.height;
     
-    int cameraLeftSide = camera.target.x;
-    int cameraRightSide = camera.target.x + SCREENWIDTH;
-    int cameraTopSide = camera.target.y;
-    int cameraBottomSide = camera.target.y + SCREENHEIGHT;
+    int cameraLeftSide = camera.anchors[ANCHOR_ORIGIN].x;
+    int cameraRightSide = camera.anchors[ANCHOR_TOP_RIGHT].x;
+    int cameraTopSide = camera.anchors[ANCHOR_ORIGIN].y;
+    int cameraBottomSide = camera.anchors[ANCHOR_BOTTOM_RIGHT].y;
     
     int drawStartX = cameraLeftSide / tileSize;
     int drawStartY = cameraTopSide / tileSize;
@@ -90,8 +91,8 @@ void drawMap() {
     }
 }
 
-void freeMapData() 
-{
+void freeMapData() {
+
     free(CURRENTLY_LOADED_MAP.mapData);
     CURRENTLY_LOADED_MAP.mapData = NULL;
 }

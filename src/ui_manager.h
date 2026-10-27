@@ -10,13 +10,14 @@ typedef struct {
     Sprite** sprites;
     //Button* buttons
 
-
 } UIContainer;
 
 typedef struct {
 
     float circleCollider;
     Sprite* sprite;
+    Vector2 mousePositionLocal;
+    Vector2 mousePositionGlobal;
 
 } MousePointer;
 

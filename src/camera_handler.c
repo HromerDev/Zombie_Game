@@ -4,37 +4,32 @@
 #include "raylib.h"
 #include "raymath.h"
 #include "ui_manager.h"
-Camera2D camera;
 
-Vector2 mousePositionLocal;
-Vector2 mousePositionGlobal;
+CameraProperties camera;
 
 int UNIT_PIXEL_SIZE = 0;
-int scaler = 60;
+int scaler = 68;
 bool isToggledFullscreen = false;
 int SCREENWIDTHPREFULLSCREEN;
 int SCREENHEIGHTPREFULLSCREEN;
 
-Vector2 CAMERA_ANCHOR;
-Vector2 CAMERA_ANCHOR_TOP_RIGHT;
-Vector2 CAMERA_ANCHOR_BOTTOM_LEFT;
-Vector2 CAMERA_ANCHOR_BOTTOM_RIGHT;
-Vector2 CAMERA_ANCHOR_CENTER;
-
 void recalculateCameraAnchors() {
 
-    CAMERA_ANCHOR = camera.target;
-    CAMERA_ANCHOR_TOP_RIGHT = (Vector2){camera.target.x + SCREENWIDTH, camera.target.y};
-    CAMERA_ANCHOR_BOTTOM_LEFT = (Vector2){camera.target.x, camera.target.y + SCREENHEIGHT};
-    CAMERA_ANCHOR_BOTTOM_RIGHT = (Vector2){camera.target.x + SCREENWIDTH, camera.target.y + SCREENHEIGHT};
-    CAMERA_ANCHOR_CENTER = (Vector2) {camera.target.x + SCREENWIDTH / 2, camera.target.y + SCREENHEIGHT / 2};
+    camera.anchors[ANCHOR_ORIGIN] = camera.camera.target;
+    camera.anchors[ANCHOR_TOP_RIGHT] = (Vector2){camera.anchors[ANCHOR_ORIGIN].x + SCREENWIDTH, camera.anchors[ANCHOR_ORIGIN].y};
+    camera.anchors[ANCHOR_BOTTOM_LEFT] = (Vector2){camera.anchors[ANCHOR_ORIGIN].x, camera.anchors[ANCHOR_ORIGIN].y + SCREENHEIGHT};
+    camera.anchors[ANCHOR_BOTTOM_RIGHT] = (Vector2){camera.anchors[ANCHOR_TOP_RIGHT].x, camera.anchors[ANCHOR_BOTTOM_LEFT].y};
+    camera.anchors[ANCHOR_CENTER] = (Vector2) {camera.anchors[ANCHOR_ORIGIN].x + (float)SCREENWIDTH / 2, camera.anchors[ANCHOR_ORIGIN].x + (float)SCREENHEIGHT / 2};
+
     updateUIElementPositions();
 }
 
 void cameraInit() {
-    
-    camera.target = Vector2Zero();
-    camera.zoom = 1;
+   
+    camera.camera.target = Vector2Zero();
+    camera.camera.zoom = 1;
+
+    recalculateCameraAnchors();
     changeResolution(SCREENWIDTH, SCREENHEIGHT);
 }
 
@@ -43,11 +38,10 @@ void changeResolution(int newScreenWidth, int newScreenHeight) {
     int shortestScreenSide = (newScreenWidth < newScreenHeight) ? newScreenWidth : newScreenHeight;
     int newUnitSize = (int)round((double)shortestScreenSide / scaler);
 
-
-    int leftover = newUnitSize % 8;
+    int leftover = newUnitSize % 4;
     
     if(leftover != 0)
-        newUnitSize += 8 - leftover; 
+        newUnitSize += 4 - leftover; 
 
     recalculateAllUnits(newUnitSize, UNIT_PIXEL_SIZE);
     UNIT_PIXEL_SIZE = newUnitSize;
@@ -73,7 +67,6 @@ void fullScreenToggle() {
 
         changeResolution(SCREENWIDTH, SCREENHEIGHT);
         isToggledFullscreen = false;
-            
     }
     else {
                  
@@ -89,22 +82,22 @@ void fullScreenToggle() {
 
 void moveCamera(int x, int y) {
 
-    camera.target.x = x;
-    camera.target.y = y;
+    camera.camera.target.x = x;
+    camera.camera.target.y = y;
 
     recalculateCameraAnchors();
 }
 
 void moveCameraRelative(float x, float y) {
 
-    camera.target.x += x;
-    camera.target.y += y;
+    camera.camera.target.x += x;
+    camera.camera.target.y += y;
 
     recalculateCameraAnchors();
 }
 
 void calculateMousePosition() {
 
-    mousePositionLocal = GetMousePosition();
-    mousePositionGlobal = GetScreenToWorld2D(mousePositionLocal, camera);
+    mousePointer.mousePositionLocal = GetMousePosition();
+    mousePointer.mousePositionGlobal = GetScreenToWorld2D(mousePointer.mousePositionLocal, camera.camera);
 }
