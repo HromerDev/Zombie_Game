@@ -61,19 +61,26 @@ enum Anchors {
 };
 
 void initTextures();
+
 Object* createObject(Rectangle collider, Sprite *sprite);
 Sprite* createSprite(Rectangle area, unsigned int texture, unsigned int layer);
 
 void destroyObject(Object *object);
 void destroySprite(Sprite *sprite);
+
 void updatePositionAnchors(Position* positionData, int anchor);
+
 void movePosition(Position* position, float x, float y, int anchor);
 void movePositionRelative(Position* position, float x, float y, int anchor);
+
 void drawSprites();
+
 //void allObjectsLayerSort(); 
 void recalculateAllUnits(double newUnitSize, double oldUnitSize);
+
 void freeObjects();
 void freeSprites();
+
 int returnObjectAmount();
 bool layersSortedCorrectly();
 
