@@ -6,6 +6,7 @@
 #include "stdlib.h"
 #include <time.h>
 #include "../scripts/game_manager.h"
+#include "ui_manager.h"
 
 Color backgroundColor = {0, 0, 0, 255};
 Texture2D textureArray[10];
@@ -300,6 +301,8 @@ void recalculateAllUnits(double newUnitSize, double oldUnitSize) {
             sprite->position.area.y = sprite->position.anchors[ANCHOR_ORIGIN].y;
         }
     }
+
+    recalculateTextUnits(difference, newUnitSize);
 
     if (UNIT_PIXEL_SIZE > 0) {
 

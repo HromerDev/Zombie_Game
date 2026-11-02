@@ -4,6 +4,7 @@
 #include "raylib.h"
 #include "../src/ui_manager.h"  
 #include "../src/object.h"
+#include "raymath.h"
 int SCREENWIDTH = 500;
 int SCREENHEIGHT = 500;
 double delta = 0;
@@ -53,7 +54,11 @@ void gameStart() {
     debug1->sprites[1] = createSprite((Rectangle){-4,0,4,4}, TEXTURE_CURSOR, LAYER_UI);
     debug2->sprites[2] = createSprite((Rectangle){0,-4,4,4}, TEXTURE_CURSOR, LAYER_UI);
     debug3->sprites[3] = createSprite((Rectangle){-4,-4,4,4}, TEXTURE_CURSOR, LAYER_UI);
-    debug4->sprites[4] = createSprite((Rectangle){-2,-2,4,4}, TEXTURE_CURSOR, LAYER_UI);
+    //debug4->sprites[4] = createSprite((Rectangle){-2,-2,4,4}, TEXTURE_CURSOR, LAYER_UI);
+
+    configureUITextContainer(&debug0->textUIElements[0], Vector2Zero(), 10, 1, YELLOW, ANCHOR_CENTER);
+
+    updateText(&debug0->textUIElements[0], "Hello World!", YELLOW);
 }
 
 void restart() {
@@ -91,6 +96,8 @@ void draw() { //drawing a frame (primarely for text)
     DrawText(TextFormat("unit pixel size:%d pixels",UNIT_PIXEL_SIZE),(int)(round(camera.position.anchors[ANCHOR_ORIGIN].x + 10)), (int)(round(camera.position.anchors[ANCHOR_ORIGIN].y + 70)), 30, YELLOW);
 
     DrawText(TextFormat("%.0fFPS", 1 / GetFrameTime()), (int)(round(camera.position.anchors[ANCHOR_BOTTOM_LEFT].x)), (int)(round(camera.position.anchors[ANCHOR_BOTTOM_LEFT].y - 20)), 20, GREEN);
+
+    drawUIText(debug0);
 }
 
 void end() { 
