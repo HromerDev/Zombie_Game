@@ -134,80 +134,52 @@ void updatePositionAnchors(Position* positionData, int anchor) {
 
     switch(anchor) {
 
-        case ANCHOR_ORIGIN:
-
-            positionData->anchors[ANCHOR_TOP_RIGHT].x = positionData->anchors[ANCHOR_ORIGIN].x + positionData->area.width;
-            positionData->anchors[ANCHOR_TOP_RIGHT].y = positionData->anchors[ANCHOR_ORIGIN].y;
-
-            positionData->anchors[ANCHOR_BOTTOM_LEFT].x = positionData->anchors[ANCHOR_ORIGIN].x;
-            positionData->anchors[ANCHOR_BOTTOM_LEFT].y = positionData->anchors[ANCHOR_ORIGIN].y + positionData->area.height;
-
-            positionData->anchors[ANCHOR_BOTTOM_RIGHT].x = positionData->anchors[ANCHOR_BOTTOM_LEFT].x + positionData->area.width;
-            positionData->anchors[ANCHOR_BOTTOM_RIGHT].y = positionData->anchors[ANCHOR_BOTTOM_LEFT].y;
-
-            positionData->anchors[ANCHOR_CENTER].x = positionData->anchors[ANCHOR_ORIGIN].x + positionData->area.width / 2;
-            positionData->anchors[ANCHOR_CENTER].y = positionData->anchors[ANCHOR_ORIGIN].y + positionData->area.height / 2;
-            break;
-
         case ANCHOR_TOP_RIGHT:
-
             positionData->anchors[ANCHOR_ORIGIN].x = positionData->anchors[ANCHOR_TOP_RIGHT].x - positionData->area.width;
             positionData->anchors[ANCHOR_ORIGIN].y = positionData->anchors[ANCHOR_TOP_RIGHT].y;
-            
-            positionData->anchors[ANCHOR_BOTTOM_LEFT].x = positionData->anchors[ANCHOR_ORIGIN].x;
-            positionData->anchors[ANCHOR_BOTTOM_LEFT].y = positionData->anchors[ANCHOR_ORIGIN].y + positionData->area.height;
-
-            positionData->anchors[ANCHOR_BOTTOM_RIGHT].x = positionData->anchors[ANCHOR_BOTTOM_LEFT].x + positionData->area.width;
-            positionData->anchors[ANCHOR_BOTTOM_RIGHT].y = positionData->anchors[ANCHOR_BOTTOM_LEFT].y;
-
-            positionData->anchors[ANCHOR_CENTER].x = positionData->anchors[ANCHOR_ORIGIN].x + positionData->area.width / 2;
-            positionData->anchors[ANCHOR_CENTER].y = positionData->anchors[ANCHOR_ORIGIN].y + positionData->area.height / 2;   
             break;
 
         case ANCHOR_BOTTOM_LEFT:
 
             positionData->anchors[ANCHOR_ORIGIN].x = positionData->anchors[ANCHOR_BOTTOM_LEFT].x;
             positionData->anchors[ANCHOR_ORIGIN].y = positionData->anchors[ANCHOR_BOTTOM_LEFT].y - positionData->area.height;
-
-            positionData->anchors[ANCHOR_TOP_RIGHT].x = positionData->anchors[ANCHOR_ORIGIN].x + positionData->area.width;
-            positionData->anchors[ANCHOR_TOP_RIGHT].y = positionData->anchors[ANCHOR_ORIGIN].y;
-            
-            positionData->anchors[ANCHOR_BOTTOM_RIGHT].x = positionData->anchors[ANCHOR_BOTTOM_LEFT].x + positionData->area.width;
-            positionData->anchors[ANCHOR_BOTTOM_RIGHT].y = positionData->anchors[ANCHOR_BOTTOM_LEFT].y;
-
-            positionData->anchors[ANCHOR_CENTER].x = positionData->anchors[ANCHOR_ORIGIN].x + positionData->area.width / 2;
-            positionData->anchors[ANCHOR_CENTER].y = positionData->anchors[ANCHOR_ORIGIN].y + positionData->area.height / 2;   
             break;
 
         case ANCHOR_BOTTOM_RIGHT:
 
             positionData->anchors[ANCHOR_ORIGIN].x = positionData->anchors[ANCHOR_BOTTOM_RIGHT].x - positionData->area.width;
             positionData->anchors[ANCHOR_ORIGIN].y = positionData->anchors[ANCHOR_BOTTOM_RIGHT].y - positionData->area.height;
-
-            positionData->anchors[ANCHOR_TOP_RIGHT].x = positionData->anchors[ANCHOR_ORIGIN].x + positionData->area.width;
-            positionData->anchors[ANCHOR_TOP_RIGHT].y = positionData->anchors[ANCHOR_ORIGIN].y;
-
-            positionData->anchors[ANCHOR_BOTTOM_LEFT].x = positionData->anchors[ANCHOR_ORIGIN].x;
-            positionData->anchors[ANCHOR_BOTTOM_LEFT].y = positionData->anchors[ANCHOR_ORIGIN].y + positionData->area.height;
-
-            positionData->anchors[ANCHOR_CENTER].x = positionData->anchors[ANCHOR_ORIGIN].x + positionData->area.width / 2;
-            positionData->anchors[ANCHOR_CENTER].y = positionData->anchors[ANCHOR_ORIGIN].y + positionData->area.height / 2;   
             break;
 
         case ANCHOR_CENTER:
 
             positionData->anchors[ANCHOR_ORIGIN].x = positionData->anchors[ANCHOR_CENTER].x - positionData->area.width / 2;
             positionData->anchors[ANCHOR_ORIGIN].y = positionData->anchors[ANCHOR_CENTER].y - positionData->area.height / 2;
-
-            positionData->anchors[ANCHOR_TOP_RIGHT].x = positionData->anchors[ANCHOR_ORIGIN].x + positionData->area.width;
-            positionData->anchors[ANCHOR_TOP_RIGHT].y = positionData->anchors[ANCHOR_ORIGIN].y;
-            
-            positionData->anchors[ANCHOR_BOTTOM_LEFT].x = positionData->anchors[ANCHOR_ORIGIN].x;
-            positionData->anchors[ANCHOR_BOTTOM_LEFT].y = positionData->anchors[ANCHOR_ORIGIN].y + positionData->area.height;
-            
-            positionData->anchors[ANCHOR_BOTTOM_RIGHT].x = positionData->anchors[ANCHOR_BOTTOM_LEFT].x + positionData->area.width;
-            positionData->anchors[ANCHOR_BOTTOM_RIGHT].y = positionData->anchors[ANCHOR_BOTTOM_LEFT].y;
             break;
+    }
+
+    if(anchor != ANCHOR_TOP_RIGHT) {
+
+        positionData->anchors[ANCHOR_TOP_RIGHT].x = positionData->anchors[ANCHOR_ORIGIN].x + positionData->area.width;
+        positionData->anchors[ANCHOR_TOP_RIGHT].y = positionData->anchors[ANCHOR_ORIGIN].y;
+    }
+
+    if(anchor != ANCHOR_BOTTOM_LEFT) {
+
+        positionData->anchors[ANCHOR_BOTTOM_LEFT].x = positionData->anchors[ANCHOR_ORIGIN].x;
+        positionData->anchors[ANCHOR_BOTTOM_LEFT].y = positionData->anchors[ANCHOR_ORIGIN].y + positionData->area.height;
+    }
+
+    if(anchor != ANCHOR_BOTTOM_RIGHT) {
+
+        positionData->anchors[ANCHOR_BOTTOM_RIGHT].x = positionData->anchors[ANCHOR_ORIGIN].x + positionData->area.width;
+        positionData->anchors[ANCHOR_BOTTOM_RIGHT].y = positionData->anchors[ANCHOR_ORIGIN].y + positionData->area.height;
+    }
+
+    if(anchor != ANCHOR_CENTER) {
+
+        positionData->anchors[ANCHOR_CENTER].x = positionData->anchors[ANCHOR_ORIGIN].x + positionData->area.width / 2;
+        positionData->anchors[ANCHOR_CENTER].y = positionData->anchors[ANCHOR_ORIGIN].y + positionData->area.height / 2;   
     }
 }
 
