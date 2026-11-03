@@ -42,7 +42,7 @@ void gameStart() {
     debug0 = createUIContainer();
     configureUIContainer(debug0, ANCHOR_ORIGIN);
     debug1 = createUIContainer();
-    configureUIContainer(debug1, ANCHOR_TOP_RIGHT);
+    configureUIContainer(debug1, ANCHOR_CENTER);
     debug2 = createUIContainer();
     configureUIContainer(debug2, ANCHOR_BOTTOM_LEFT);
     debug3 = createUIContainer();
@@ -56,9 +56,9 @@ void gameStart() {
     debug3->sprites[3] = createSprite((Rectangle){-4,-4,4,4}, TEXTURE_CURSOR, LAYER_UI);
     //debug4->sprites[4] = createSprite((Rectangle){-2,-2,4,4}, TEXTURE_CURSOR, LAYER_UI);
 
-    configureUITextContainer(&debug0->textUIElements[0], Vector2Zero(), 10, 1, YELLOW, ANCHOR_CENTER);
+    configureUITextContainer(&debug1->textUIElements[0], Vector2Zero(), 10, 1, YELLOW, ANCHOR_CENTER);
 
-    updateText(&debug0->textUIElements[0], "Hello World!", YELLOW);
+    updateText(&debug1->textUIElements[0], "Hello World!", YELLOW);
 }
 
 void restart() {
@@ -97,7 +97,7 @@ void draw() { //drawing a frame (primarely for text)
 
     DrawText(TextFormat("%.0fFPS", 1 / GetFrameTime()), (int)(round(camera.position.anchors[ANCHOR_BOTTOM_LEFT].x)), (int)(round(camera.position.anchors[ANCHOR_BOTTOM_LEFT].y - 20)), 20, GREEN);
 
-    drawUIText(debug0);
+    drawUIText();
 }
 
 void end() { 

@@ -36,12 +36,11 @@ extern MousePointer mousePointer;
 
 void configureUITextContainer(TextUIElement* textUIElement, Vector2 origin, int height, int spacing, Color color, int anchor);
 void updateText(TextUIElement* textUIElement, const char* text, Color color);
-void drawUIText(UIContainer* uiContainer);
 void initUIContainers();
 UIContainer* createUIContainer();
 void configureUIContainer(UIContainer* uiContainer, int anchor);
 void updateUIElementPositions();
-void drawUIText(UIContainer* uiContainer);
+void drawUIText();
 void recalculateTextUnits(double difference, double newUnitSize);
 void handleMousePointer();
 void freeUIContainers();

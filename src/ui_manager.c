@@ -66,7 +66,7 @@ void updateUIElementPositions() {
             if(temp->sprites[j] != NULL)
                 movePosition(&temp->sprites[j]->position, camera.position.anchors[temp->anchor].x + temp->sprites[j]->originalArea.x * UNIT_PIXEL_SIZE, camera.position.anchors[temp->anchor].y + temp->sprites[j]->originalArea.y * UNIT_PIXEL_SIZE, ANCHOR_ORIGIN);
             if(temp->textUIElements[j].text[0] != '\0')
-                movePosition(&temp->textUIElements[j].position, (int)(round(camera.position.anchors[temp->textUIElements[j].anchor].x + temp->textUIElements[j].offset.x)), (int)(round(camera.position.anchors[temp->textUIElements[j].anchor].y + temp->textUIElements[j].offset.y)), temp->textUIElements[j].anchor);
+                movePosition(&temp->textUIElements[j].position, (int)round(camera.position.anchors[temp->anchor].x + temp->textUIElements[j].offset.x), (int)round(camera.position.anchors[temp->anchor].y + temp->textUIElements[j].offset.y), temp->textUIElements[j].anchor);
         }
     }
 }
@@ -80,22 +80,25 @@ void updateText(TextUIElement* textUIElement, const char* text, Color color) {
     
     textUIElement->position.area.width = MeasureTextEx(GetFontDefault(), textUIElement->text, textUIElement->position.area.height, UNIT_PIXEL_SIZE).x;
 
-    updatePositionAnchors(
-        &textUIElement->position,
-        ANCHOR_ORIGIN
-    );
+    updatePositionAnchors(&textUIElement->position, ANCHOR_ORIGIN);
 }
 
-void drawUIText(UIContainer* uiContainer) { 
+void drawUIText() { 
 
-    for(int i = 0; i < DEFAULT_CONTAINER_CAPACITY; i++) {
+    for(int j = 0; j < allUIContainers->size; j++) {
         
-        if(uiContainer->textUIElements[i].text[0] == '\0')
-            continue;
+        UIContainer* uiContainer = allUIContainers->items[j];
 
-        DrawTextEx(GetFontDefault(), uiContainer->textUIElements[i].text, uiContainer->textUIElements[i].position.anchors[ANCHOR_ORIGIN], uiContainer->textUIElements[i].position.area.height, 1 * UNIT_PIXEL_SIZE, uiContainer->textUIElements->color);
-        DrawRectangleLines(uiContainer->textUIElements[i].position.area.x, uiContainer->textUIElements[i].position.area.y, uiContainer->textUIElements[i].position.area.width , uiContainer->textUIElements[i].position.area.height, GREEN);
+        for(int i = 0; i < DEFAULT_CONTAINER_CAPACITY; i++) {
+        
+            if(uiContainer->textUIElements[i].text[0] == '\0')
+                continue;
+
+            DrawTextEx(GetFontDefault(), uiContainer->textUIElements[i].text, uiContainer->textUIElements[i].position.anchors[ANCHOR_ORIGIN], uiContainer->textUIElements[i].position.area.height, 1 * UNIT_PIXEL_SIZE, uiContainer->textUIElements->color);
+            DrawRectangleLines(uiContainer->textUIElements[i].position.area.x, uiContainer->textUIElements[i].position.area.y, uiContainer->textUIElements[i].position.area.width , uiContainer->textUIElements[i].position.area.height, GREEN);
     }
+    }
+
 }
 
 void handleMousePointer() {
