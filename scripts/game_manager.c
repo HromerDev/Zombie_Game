@@ -17,6 +17,7 @@ UIContainer* debug2;
 UIContainer* debug3;
 UIContainer* debug4;
 
+    int i = 0;
 void start() { //initializations
     
     InitWindow(SCREENWIDTH, SCREENHEIGHT, WINDOWNAME);
@@ -42,7 +43,7 @@ void gameStart() {
     debug0 = createUIContainer();
     configureUIContainer(debug0, ANCHOR_ORIGIN);
     debug1 = createUIContainer();
-    configureUIContainer(debug1, ANCHOR_CENTER);
+    configureUIContainer(debug1, ANCHOR_TOP_RIGHT);
     debug2 = createUIContainer();
     configureUIContainer(debug2, ANCHOR_BOTTOM_LEFT);
     debug3 = createUIContainer();
@@ -51,14 +52,13 @@ void gameStart() {
     configureUIContainer(debug4, ANCHOR_CENTER);
 
     debug0->sprites[0] = createSprite((Rectangle){0,0,4,4}, TEXTURE_CURSOR, LAYER_UI);
-    debug1->sprites[1] = createSprite((Rectangle){-4,0,4,4}, TEXTURE_CURSOR, LAYER_UI);
-    debug2->sprites[2] = createSprite((Rectangle){0,-4,4,4}, TEXTURE_CURSOR, LAYER_UI);
-    debug3->sprites[3] = createSprite((Rectangle){-4,-4,4,4}, TEXTURE_CURSOR, LAYER_UI);
-    //debug4->sprites[4] = createSprite((Rectangle){-2,-2,4,4}, TEXTURE_CURSOR, LAYER_UI);
+    debug1->sprites[0] = createSprite((Rectangle){4,0,4,4}, TEXTURE_CURSOR, LAYER_UI);
+    debug2->sprites[0] = createSprite((Rectangle){0,-4,4,4}, TEXTURE_CURSOR, LAYER_UI);
+    debug3->sprites[0] = createSprite((Rectangle){-4,-4,4,4}, TEXTURE_CURSOR, LAYER_UI);
+    debug4->sprites[0] = createSprite((Rectangle){-2,-2,4,4}, TEXTURE_CURSOR, LAYER_UI);
 
-    configureUITextContainer(&debug1->textUIElements[0], Vector2Zero(), 10, 1, YELLOW, ANCHOR_CENTER);
-
-    updateText(&debug1->textUIElements[0], "Hello World!", YELLOW);
+    configureUITextContainer(&debug0->textUIElements[0], Vector2Zero(), 10, 1, YELLOW, ANCHOR_ORIGIN);
+    
 }
 
 void restart() {
@@ -67,6 +67,8 @@ void restart() {
     gameStart();
 }
 void update() { //input handling, logic    
+
+    updateText(&debug0->textUIElements[0], TextFormat("A A %d", i+=10), YELLOW);
 
     if(IsKeyDown(KEY_LEFT_SHIFT))   
         cameraSpeed = 60; 
@@ -85,6 +87,7 @@ void update() { //input handling, logic
     if(IsKeyPressed(KEY_F))
         fullScreenToggle(); 
     
+
 }
 
 void draw() { //drawing a frame (primarely for text)

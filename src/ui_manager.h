@@ -34,14 +34,18 @@ typedef struct {
 
 extern MousePointer mousePointer;
 
-void configureUITextContainer(TextUIElement* textUIElement, Vector2 origin, int height, int spacing, Color color, int anchor);
-void updateText(TextUIElement* textUIElement, const char* text, Color color);
 void initUIContainers();
 UIContainer* createUIContainer();
+void configureUITextContainer(TextUIElement* textUIElement, Vector2 origin, int height, int spacing, Color color, int anchor);
 void configureUIContainer(UIContainer* uiContainer, int anchor);
+
 void updateUIElementPositions();
+void updateText(TextUIElement* textUIElement, const char* text, Color color);
 void drawUIText();
+
 void recalculateTextUnits(double difference, double newUnitSize);
+
 void handleMousePointer();
+
 void freeUIContainers();
 #endif

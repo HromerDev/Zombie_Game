@@ -50,6 +50,7 @@ void configureUITextContainer(TextUIElement* textUIElement, Vector2 offset, int 
     textUIElement->anchor = anchor;
     textUIElement->color = color;
     movePosition(&textUIElement->position, offset.x, offset.y, anchor);
+    updateText(textUIElement, "EMPTY", RED);
 }
 
 void updateUIElementPositions() {
@@ -78,9 +79,11 @@ void updateText(TextUIElement* textUIElement, const char* text, Color color) {
     if (text != NULL)
         snprintf(textUIElement->text, sizeof(textUIElement->text), "%s", text);
     
+    textUIElement->color = color;
     textUIElement->position.area.width = MeasureTextEx(GetFontDefault(), textUIElement->text, textUIElement->position.area.height, UNIT_PIXEL_SIZE).x;
 
     updatePositionAnchors(&textUIElement->position, ANCHOR_ORIGIN);
+
 }
 
 void drawUIText() { 
